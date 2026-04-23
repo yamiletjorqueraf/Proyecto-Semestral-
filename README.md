@@ -1,2 +1,2 @@
-# Proecto-Semestral-
+# Proyecto-Semestral-
  Negocio De Veterinaria/Peluqueria
