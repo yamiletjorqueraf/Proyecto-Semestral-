@@ -1,6 +1,7 @@
 package cl.duoc.ms_personal.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
@@ -36,7 +37,10 @@ public class PersonalService {
         
         return personalRepository.save(existente);
     }
-
+     
+    public Optional<Personal> findById(Long id) {
+    return personalRepository.findById(id);
+}
     public boolean existePorId(Long id) {
         return personalRepository.existsById(id);
     }

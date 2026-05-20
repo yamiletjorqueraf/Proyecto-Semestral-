@@ -1,6 +1,7 @@
 package cl.duoc.ms_personal.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -45,12 +46,17 @@ private final PersonalService personalService;
         return ResponseEntity.ok(personalService.existePorId(id));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PersonalDTO> buscarPorId(@PathVariable Long id) {
-        return personalService.findById(id)
-            .map(p -> ResponseEntity.ok(PersonalDTO.fromModel(p)))
-            .orElse(ResponseEntity.notFound().build());
+ @GetMapping("/{id}")
+public ResponseEntity<PersonalDTO> buscarPorId(@PathVariable Long id) {
+        Optional<Personal> personal = personalService.findById(id);
+        if (personal.isPresent()) {
+        return ResponseEntity.ok(
+            PersonalDTO.fromModel(personal.get())
+        );
     }
+
+    return ResponseEntity.notFound().build();
+}
 
     @PutMapping("/{id}")
     public ResponseEntity<PersonalDTO> actualizar(@PathVariable Long id, @RequestBody PersonalDTO dto) {
