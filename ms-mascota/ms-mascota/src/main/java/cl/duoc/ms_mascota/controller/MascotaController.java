@@ -1,6 +1,7 @@
 package cl.duoc.ms_mascota.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -40,12 +41,17 @@ public class MascotaController {
         return ResponseEntity.ok(dtos);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MascotaDTO> buscarPorId(@PathVariable Long id) {
-        return mascotaService.findById(id)
-            .map(m -> ResponseEntity.ok(MascotaDTO.fromModel(m)))
-            .orElse(ResponseEntity.notFound().build());
+@GetMapping("/{id}")
+public ResponseEntity<MascotaDTO> buscarPorId(@PathVariable Long id) {
+    Optional<Mascota> mascota = mascotaService.findById(id);
+    if (mascota.isPresent()) {
+        return ResponseEntity.ok(
+            MascotaDTO.fromModel(mascota.get())
+        );
     }
+
+    return ResponseEntity.notFound().build();
+}
 
     @PutMapping("/{id}")
     public ResponseEntity<MascotaDTO> actualizar(@PathVariable Long id, @RequestBody MascotaDTO dto) {

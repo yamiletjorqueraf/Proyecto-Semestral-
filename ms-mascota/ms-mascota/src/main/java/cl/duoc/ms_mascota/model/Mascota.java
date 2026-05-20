@@ -1,6 +1,6 @@
 package cl.duoc.ms_mascota.model;
 
-import org.antlr.v4.runtime.misc.NotNull;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

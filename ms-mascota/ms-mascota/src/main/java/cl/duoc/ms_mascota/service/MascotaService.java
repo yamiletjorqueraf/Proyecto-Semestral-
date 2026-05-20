@@ -1,6 +1,7 @@
 package cl.duoc.ms_mascota.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -46,7 +47,9 @@ public class MascotaService {
         
         return mascotaRepository.save(existente);
     }
-
+    public Optional<Mascota> findById(Long id) {
+    return mascotaRepository.findById(id);
+}
     public boolean existePorId(Long id) {
         return mascotaRepository.existsById(id);
     }
