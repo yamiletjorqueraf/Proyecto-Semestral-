@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cl.duoc.ms_usuario.Model.Usuario;
 import cl.duoc.ms_usuario.Service.UsuarioService;
 import cl.duoc.ms_usuario.dto.UsuarioDTO;
-import cl.duoc.ms_usuario.dto.LoginRequest;
-import cl.duoc.ms_usuario.security.JwtUtil;
+
 
 @RestController
 @RequestMapping("/api/v1/usuario")
@@ -68,25 +67,5 @@ public class UsuarioController {
         usuarioService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
-@PostMapping("/login")
-public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
-    // USUARIO DE PRUEBA TEMPORAL (Pon esto al principio de tu método)
-    if ("admin".equals(request.getUsername()) && "1234".equals(request.getPassword())) {
-        String token = JwtUtil.generarToken(request.getUsername());
-        return ResponseEntity.ok(token);
-    }
-
-    // Tu código antiguo por si acaso
-    List<Usuario> usuarios = usuarioService.listar();
-    for(Usuario u : usuarios){
-        if(u.getUsername().equals(request.getUsername()) && u.getPassword().equals(request.getPassword())){
-            String token = JwtUtil.generarToken(request.getUsername());
-            return ResponseEntity.ok(token);
-        }
-    }
-
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-            .body("Usuario o contraseña incorrectos");
-}
 }

@@ -17,16 +17,15 @@ public class UsuarioDTO {
     private String rol;
     private String correo;
     private Long telefono;
-     private String username;
-    private String password;
+
 
     public Usuario toModel() {
-        return new Usuario(idUsuario, nombre, apellido, rol, correo, telefono,username,password);
+        return new Usuario(idUsuario, nombre, apellido, rol, correo, telefono);
     }
 
     public static UsuarioDTO fromModel(Usuario u) {
         if (u == null) return null;
-        return new UsuarioDTO(u.getIdUsuario(), u.getNombre(), u.getApellido(), u.getRol(), u.getCorreo(), u.getTelefono(), u.getUsername(),u.getPassword());
+        return new UsuarioDTO(u.getIdUsuario(), u.getNombre(), u.getApellido(), u.getRol(), u.getCorreo(), u.getTelefono());
     }
 
 
