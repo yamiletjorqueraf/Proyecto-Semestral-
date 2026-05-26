@@ -41,10 +41,15 @@ public class MascotaController {
         return ResponseEntity.ok(dtos);
     }
 
-@GetMapping("/{id}")
-public ResponseEntity<MascotaDTO> buscarPorId(@PathVariable Long id) {
-    Optional<Mascota> mascota = mascotaService.findById(id);
-    if (mascota.isPresent()) {
+    @GetMapping("/{id}/exists")
+    public ResponseEntity<Boolean> existeMascota(@PathVariable Long id) {
+        return ResponseEntity.ok(mascotaService.existePorId(id));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MascotaDTO> buscarPorId(@PathVariable Long id) {
+        Optional<Mascota> mascota = mascotaService.findById(id);
+        if (mascota.isPresent()) {
         return ResponseEntity.ok(
             MascotaDTO.fromModel(mascota.get())
         );
