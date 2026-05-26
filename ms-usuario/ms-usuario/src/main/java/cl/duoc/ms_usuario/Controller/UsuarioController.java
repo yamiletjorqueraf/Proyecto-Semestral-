@@ -69,19 +69,18 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 @PostMapping("/login")
-public ResponseEntity<?> login(@RequestBody LoginRequest request){
+public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
-    List<Usuario> usuarios = usuarioService.listar();
-    
-    System.out.println("Usuarios disponibles en la BD: " + usuarios.size());
-    for(Usuario u : usuarios) {
-        System.out.println("User en BD: '" + u.getUsername() + "' | Pass en BD: '" + u.getPassword() + "'");
+    // USUARIO DE PRUEBA TEMPORAL (Pon esto al principio de tu método)
+    if ("admin".equals(request.getUsername()) && "1234".equals(request.getPassword())) {
+        String token = JwtUtil.generarToken(request.getUsername());
+        return ResponseEntity.ok(token);
     }
 
+    // Tu código antiguo por si acaso
+    List<Usuario> usuarios = usuarioService.listar();
     for(Usuario u : usuarios){
-        if(u.getUsername().equals(request.getUsername())
-            && u.getPassword().equals(request.getPassword())){
-
+        if(u.getUsername().equals(request.getUsername()) && u.getPassword().equals(request.getPassword())){
             String token = JwtUtil.generarToken(request.getUsername());
             return ResponseEntity.ok(token);
         }
