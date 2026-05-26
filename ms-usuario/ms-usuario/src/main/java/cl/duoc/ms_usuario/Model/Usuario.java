@@ -48,6 +48,9 @@ public class Usuario {
     @NotNull(message = "Debe tener numero de contacto")
     @Column(name = "telefono")
     private Long telefono;
+     private String username;
+    private String password;
 
+  
 
 }
