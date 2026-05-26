@@ -32,7 +32,7 @@ public class Mascota {
     private String raza;
 
     @NotNull(message = "Debe registrar la edad")
-    private Integer edad;
+    private int edad;
 
     @NotNull(message = "La mascota debe tener un dueño asignado")
     private Long idDueno; // Relación lógica por ID hacia ms-dueno
