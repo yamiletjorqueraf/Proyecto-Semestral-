@@ -19,7 +19,7 @@ import cl.duoc.ms_cita.Service.CitaService;
 import cl.duoc.ms_cita.dto.CitaDTO;
 
 @RestController
-@RequestMapping("api/v1/cita")
+@RequestMapping("/api/v1/cita")
 public class CitaController {
 
     private final CitaService citaService;

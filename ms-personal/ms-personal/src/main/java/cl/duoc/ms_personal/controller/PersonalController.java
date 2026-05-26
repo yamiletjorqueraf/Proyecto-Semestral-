@@ -20,7 +20,7 @@ import cl.duoc.ms_personal.model.Personal;
 import cl.duoc.ms_personal.service.PersonalService;
 
 @RestController
-@RequestMapping("api/v1/personal")
+@RequestMapping("/api/v1/personal")
 public class PersonalController {
 private final PersonalService personalService;
 

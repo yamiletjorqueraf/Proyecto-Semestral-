@@ -20,7 +20,7 @@ import cl.duoc.ms_mascota.model.Mascota;
 import cl.duoc.ms_mascota.service.MascotaService;
 
 @RestController
-@RequestMapping("api/v1/mascota")
+@RequestMapping("/api/v1/mascota")
 public class MascotaController {
  private final MascotaService mascotaService;
 

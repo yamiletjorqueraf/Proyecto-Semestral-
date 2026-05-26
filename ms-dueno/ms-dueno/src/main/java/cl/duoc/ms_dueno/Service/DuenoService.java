@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import cl.duoc.ms_dueno.Client.MascotaClient;
+//import cl.duoc.ms_dueno.Client.MascotaClient;
 import cl.duoc.ms_dueno.Client.UsuarioClient;
 import cl.duoc.ms_dueno.Model.Dueno;
 import cl.duoc.ms_dueno.Repository.DuenoRepository;
@@ -14,13 +14,13 @@ import cl.duoc.ms_dueno.Repository.DuenoRepository;
 public class DuenoService {
     private final DuenoRepository duenoRepository;
     private final UsuarioClient usuarioClient;
-    private final MascotaClient mascotaClient;
+    //private final MascotaClient mascotaClient;
 
     public DuenoService(DuenoRepository duenoRepository,
-                        UsuarioClient usuarioClient, MascotaClient mascotaClient) {
+                        UsuarioClient usuarioClient) {
 		this.duenoRepository = duenoRepository;
         this.usuarioClient = usuarioClient;
-        this.mascotaClient = mascotaClient;
+        //this.mascotaClient = mascotaClient;
 	}
 
     public List<Dueno> listar() {

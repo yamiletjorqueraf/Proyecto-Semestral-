@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: ms-usuario
+            uri: http://localhost:8081
+            predicates:
+              - Path=/api/v1/usuario/**
+          - id: ms-dueno
+            uri: http://localhost:8082
+            predicates:
+              - Path=/api/v1/dueno/**
+          - id: ms-cita
+            uri: http://localhost:8084
+            predicates:
+              - Path=/api/v1/cita/**
+          - id: ms-mascota
+            uri: http://localhost:8083
+            predicates:
+              - Path=/api/v1/mascota/**
+          - id: ms-personal
+            uri: http://localhost:8085
+            predicates:
+              - Path=/api/v1/personal/**
+
+server:
+  port: 8080

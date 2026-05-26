@@ -21,7 +21,7 @@ import cl.duoc.ms_usuario.dto.LoginRequest;
 import cl.duoc.ms_usuario.security.JwtUtil;
 
 @RestController
-@RequestMapping("api/v1/usuario")
+@RequestMapping("/api/v1/usuario")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
