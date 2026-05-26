@@ -13,7 +13,7 @@ public class MascotaDTO {
     private String nombre;
     private String especie;
     private String raza;
-    private Integer edad;
+    private int edad;
     private Long idDueno;
 
     public static MascotaDTO fromModel(Mascota mascota) {
