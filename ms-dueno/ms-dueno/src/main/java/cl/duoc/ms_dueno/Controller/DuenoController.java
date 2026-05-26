@@ -19,7 +19,7 @@ import cl.duoc.ms_dueno.Service.DuenoService;
 import cl.duoc.ms_dueno.dto.DuenoDTO;
 
 @RestController
-@RequestMapping("api/v1/dueno")
+@RequestMapping("/api/v1/dueno")
 public class DuenoController {
 
     private final DuenoService duenoService;

@@ -19,7 +19,7 @@ import cl.duoc.ms_usuario.Service.UsuarioService;
 import cl.duoc.ms_usuario.dto.UsuarioDTO;
 
 @RestController
-@RequestMapping("api/v1/usuario")
+@RequestMapping("/api/v1/usuario")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
