@@ -6,7 +6,7 @@ spring:
       mvc:
         routes:
           - id: ms-usuario
-            uri: http://localhost:8081
+            uri: http://localhost:8091
             predicates:
               - Path=/api/v1/usuario/**
           - id: ms-dueno
