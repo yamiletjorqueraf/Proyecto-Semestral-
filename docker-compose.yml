@@ -1,0 +1,44 @@
+x-common-env: &common-env
+  SECRET: "esta_es_mi_compleja_clave_secreta"
+
+services:
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "9090:9090"
+    environment:
+      <<: *common-env
+    depends_on:
+      - cliente-service
+      - compra-service
+      - producto-service
+      - pago-service
+
+  cliente-service:
+    build: ./cliente-service
+    ports:
+      - "9091:9091"
+    environment:
+      <<: *common-env
+
+  compra-service:
+    build: ./compra-service
+    ports:
+      - "9092:9092"
+    environment:
+      <<: *common-env
+
+  producto-service:
+    build: ./producto-service
+    ports:
+      - "9093:9093"
+    environment:
+      <<: *common-env
+
+  pago-service:
+    build: ./pago-service
+    ports:
+      - "9095:9095"
+    environment:
+      <<: *common-env
