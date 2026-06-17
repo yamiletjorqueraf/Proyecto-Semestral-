@@ -17,7 +17,7 @@ spring.cloud.gateway.routes[2].predicates[0]=Path=/api/v1/cita/**
 
 spring.cloud.gateway.routes[3].id=ms-mascota
 spring.cloud.gateway.routes[3].uri=http://localhost:8083
-spring.cloud.gateway.routes[3}.predicates[0]=Path=/api/v1/mascota/**
+spring.cloud.gateway.routes[3].predicates[0]=Path=/api/v1/mascota/**
 
 spring.cloud.gateway.routes[4].id=ms-personal
 spring.cloud.gateway.routes[4].uri=http://localhost:8085
