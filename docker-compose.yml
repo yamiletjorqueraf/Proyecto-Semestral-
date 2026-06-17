@@ -9,36 +9,83 @@ services:
       - "9090:9090"
     environment:
       <<: *common-env
-    depends_on:
-      - cliente-service
-      - compra-service
-      - producto-service
-      - pago-service
-
-  cliente-service:
-    build: ./cliente-service
+    depends_on:      
+      - ms-usuario
+      - ms-dueno
+      - ms-mascota
+      - ms-personal
+      - ms-cita
+      - ms-hospitalizacion
+      - ms-resultados-examenes
+      - ms-farmacia
+      - ms-ventas
+      - ms-pago
+  ms-usuario:
+    build: ./ms-usuario
     ports:
-      - "9091:9091"
+      - "8091:8091"
     environment:
       <<: *common-env
 
-  compra-service:
-    build: ./compra-service
+  ms-dueno:
+    build: ./ms-dueno
     ports:
-      - "9092:9092"
+      - "8082:8082"
     environment:
       <<: *common-env
 
-  producto-service:
-    build: ./producto-service
+  ms-mascota:
+    build: ./ms-mascota
     ports:
-      - "9093:9093"
+      - "8083:8083"
     environment:
       <<: *common-env
 
-  pago-service:
-    build: ./pago-service
+  ms-personal:
+    build: ./ms-personal
     ports:
-      - "9095:9095"
+      - "8084:8084"
+    environment:
+      <<: *common-env
+
+  ms-cita:
+    build: ./ms-cita
+    ports:
+      - "8085:8085"
+    environment:
+      <<: *common-env
+    
+  ms-hospitalizacion:
+    build: ./ms-hospitalizacion
+    ports:
+      - "8086:8086"
+    environment:
+      <<: *common-env
+
+  ms-resultados-examenes:
+    build: ./ms-resultados-examenes
+    ports:
+      - "8087:8087"
+    environment:
+      <<: *common-env
+
+  ms-farmacia:
+    build: ./ms-farmacia
+    ports:
+      - "8088:8088"
+    environment:
+      <<: *common-env
+
+  ms-ventas:
+    build: ./ms-ventas
+    ports:
+      - "8089:8089"
+    environment:
+      <<: *common-env
+
+  ms-pago:
+    build: ./ms-pago
+    ports:
+      - "8090:8090"
     environment:
       <<: *common-env

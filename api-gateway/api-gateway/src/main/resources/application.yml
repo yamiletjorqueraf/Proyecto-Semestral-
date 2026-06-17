@@ -13,18 +13,37 @@ spring:
             uri: http://localhost:8082
             predicates:
               - Path=/api/v1/dueno/**
-          - id: ms-cita
-            uri: http://localhost:8084
-            predicates:
-              - Path=/api/v1/cita/**
           - id: ms-mascota
             uri: http://localhost:8083
             predicates:
               - Path=/api/v1/mascota/**
           - id: ms-personal
+            uri: http://localhost:8084
+            predicates:
+              - Path=/api/v1/personal/**    
+          - id: ms-cita
             uri: http://localhost:8085
             predicates:
-              - Path=/api/v1/personal/**
-
+              - Path=/api/v1/cita/**
+          - id: ms-hospitalizacion
+            uri: http://localhost:8086
+            predicates:
+              - Path=/api/v1/hospitalizacion/**
+          - id: ms-resultados-examenes
+            uri: http://localhost:8087
+            predicates:
+              - Path=/api/v1/resultados/**
+          - id: ms-farmacia
+            uri: http://localhost:8088
+            predicates:
+              - Path=/api/v1/farmacia/**
+          - id: ms-ventas
+            uri: http://localhost:8089
+            predicates:
+              - Path=/api/v1/ventas/**
+          - id: ms-pago
+            uri: http://localhost:8090
+            predicates:
+              - Path=/api/v1/pago/**
 server:
   port: 8080

@@ -5,17 +5,32 @@ FOR /f %%i IN ('docker images -aq') DO docker rmi -f %%i
 cd api-gateway
 call .\mvnw clean package -DskipTests
 
-cd ../auth-service
+cd ../ms-cita
 call .\mvnw clean package -DskipTests
 
-cd ../cliente-service
+cd ../ms-dueno
 call .\mvnw clean package -DskipTests
 
-cd ../compra-service
+cd ../ms-farmacia
 call  .\mvnw clean package -DskipTests
 
-cd ../producto-service
+cd ../ms-hospitalizacion
 call .\mvnw clean package -DskipTests
 
-cd ../pago-service
+cd ../ms-mascota
+call .\mvnw clean package -DskipTests
+
+cd ../ms-pago
+call .\mvnw clean package -DskipTests
+
+cd ../ms-personal
+call .\mvnw clean package -DskipTests
+
+cd ../ms-resultados-examenes
+call .\mvnw clean package -DskipTests
+
+cd ../ms-usuario
+call .\mvnw clean package -DskipTests
+
+cd ../ms-ventas
 call .\mvnw clean package -DskipTests
