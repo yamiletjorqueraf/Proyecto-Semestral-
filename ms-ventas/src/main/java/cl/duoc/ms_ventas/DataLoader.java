@@ -1,7 +1,7 @@
 package cl.duoc.ms_ventas;
 
-import cl.duoc.ms_ventas.Model.Venta;
-import cl.duoc.ms_ventas.Repository.VentaRepository;
+import cl.duoc.ms_ventas.model.Venta;
+import cl.duoc.ms_ventas.repository.VentaRepository;
 import net.datafaker.Faker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

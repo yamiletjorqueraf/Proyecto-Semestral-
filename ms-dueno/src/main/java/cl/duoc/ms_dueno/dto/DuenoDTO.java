@@ -1,6 +1,6 @@
 package cl.duoc.ms_dueno.dto;
 
-import cl.duoc.ms_dueno.Model.Dueno;
+import cl.duoc.ms_dueno.model.Dueno;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

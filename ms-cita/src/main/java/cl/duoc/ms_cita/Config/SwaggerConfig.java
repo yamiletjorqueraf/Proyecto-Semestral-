@@ -1,4 +1,4 @@
-package cl.duoc.ms_cita.Config;
+package cl.duoc.ms_cita.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

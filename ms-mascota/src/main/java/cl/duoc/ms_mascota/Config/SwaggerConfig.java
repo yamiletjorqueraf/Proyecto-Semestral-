@@ -1,4 +1,4 @@
-package cl.duoc.ms_mascota.Config;
+package cl.duoc.ms_mascota.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

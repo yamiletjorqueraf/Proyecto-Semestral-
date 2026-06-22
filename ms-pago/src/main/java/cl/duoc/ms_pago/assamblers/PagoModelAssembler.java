@@ -1,9 +1,10 @@
 package cl.duoc.ms_pago.assamblers;
 
 
-import cl.duoc.ms_pago.Controller.PagoController;
 import cl.duoc.ms_pago.dto.PagoDTO;
-import cl.duoc.ms_pago.Model.Pago;
+import cl.duoc.ms_pago.model.Pago;
+import cl.duoc.ms_pago.controller.PagoController;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 

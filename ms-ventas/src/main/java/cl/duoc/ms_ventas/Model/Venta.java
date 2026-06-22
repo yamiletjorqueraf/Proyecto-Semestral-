@@ -1,4 +1,4 @@
-package cl.duoc.ms_ventas.Model;
+package cl.duoc.ms_ventas.model;
 
 import java.util.Date;
  

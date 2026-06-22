@@ -1,4 +1,4 @@
-package cl.duoc.ms_cita.Controller;
+package cl.duoc.ms_cita.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cl.duoc.ms_cita.Model.Cita;
-import cl.duoc.ms_cita.Service.CitaService;
 import cl.duoc.ms_cita.dto.CitaDTO;
+import cl.duoc.ms_cita.model.Cita;
+import cl.duoc.ms_cita.service.CitaService;
 
 @RestController
 @RequestMapping("/api/v1/cita")

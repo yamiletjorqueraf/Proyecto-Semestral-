@@ -1,4 +1,4 @@
-package cl.duoc.ms_cita.Model;
+package cl.duoc.ms_cita.model;
 
 import java.time.LocalDateTime;
 

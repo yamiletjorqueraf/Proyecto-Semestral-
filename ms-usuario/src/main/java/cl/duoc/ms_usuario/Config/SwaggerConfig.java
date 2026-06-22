@@ -1,4 +1,4 @@
-package cl.duoc.ms_usuario.Config;
+package cl.duoc.ms_usuario.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

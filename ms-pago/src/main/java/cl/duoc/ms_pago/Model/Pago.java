@@ -1,4 +1,4 @@
-package cl.duoc.ms_pago.Model;
+package cl.duoc.ms_pago.model;
 
 import java.util.Date;
 

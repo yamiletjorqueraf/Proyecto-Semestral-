@@ -1,4 +1,4 @@
-package cl.duoc.ms_dueno.Controller;
+package cl.duoc.ms_dueno.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cl.duoc.ms_dueno.Model.Dueno;
-import cl.duoc.ms_dueno.Service.DuenoService;
 import cl.duoc.ms_dueno.dto.DuenoDTO;
+import cl.duoc.ms_dueno.model.Dueno;
+import cl.duoc.ms_dueno.service.DuenoService;
 
 @RestController
 @RequestMapping("/api/v1/dueno")

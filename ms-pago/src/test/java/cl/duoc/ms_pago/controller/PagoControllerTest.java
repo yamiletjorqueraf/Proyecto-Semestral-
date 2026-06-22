@@ -22,11 +22,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import cl.duoc.ms_pago.Controller.PagoController;
-import cl.duoc.ms_pago.Model.Pago;
-import cl.duoc.ms_pago.Service.PagoService;
 import cl.duoc.ms_pago.assamblers.PagoModelAssembler;
+import cl.duoc.ms_pago.controller.PagoController;
 import cl.duoc.ms_pago.dto.PagoDTO;
+import cl.duoc.ms_pago.model.Pago;
+import cl.duoc.ms_pago.service.PagoService;
 
 import java.util.Date;
 import java.util.List;

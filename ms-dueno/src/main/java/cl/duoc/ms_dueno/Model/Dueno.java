@@ -1,4 +1,4 @@
-package cl.duoc.ms_dueno.Model;
+package cl.duoc.ms_dueno.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

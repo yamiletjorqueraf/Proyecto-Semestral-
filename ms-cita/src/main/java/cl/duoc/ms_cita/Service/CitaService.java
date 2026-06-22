@@ -1,14 +1,14 @@
-package cl.duoc.ms_cita.Service;
+package cl.duoc.ms_cita.service;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import cl.duoc.ms_cita.Client.MascotaClient;
-import cl.duoc.ms_cita.Client.PersonalClient;
-import cl.duoc.ms_cita.Model.Cita;
-import cl.duoc.ms_cita.Repository.CitaRepository;
+import cl.duoc.ms_cita.client.MascotaClient;
+import cl.duoc.ms_cita.client.PersonalClient;
+import cl.duoc.ms_cita.model.Cita;
+import cl.duoc.ms_cita.repository.CitaRepository;
 
 @Service
 public class CitaService {

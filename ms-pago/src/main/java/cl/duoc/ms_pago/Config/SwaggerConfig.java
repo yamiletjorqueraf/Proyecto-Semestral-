@@ -1,4 +1,4 @@
-package cl.duoc.ms_pago.Config;
+package cl.duoc.ms_pago.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

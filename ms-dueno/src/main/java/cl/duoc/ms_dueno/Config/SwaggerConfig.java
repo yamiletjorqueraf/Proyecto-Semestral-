@@ -1,4 +1,4 @@
-package cl.duoc.ms_dueno.Config;
+package cl.duoc.ms_dueno.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

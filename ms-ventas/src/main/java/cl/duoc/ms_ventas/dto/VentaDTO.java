@@ -3,8 +3,8 @@ package cl.duoc.ms_ventas.dto;
 import java.util.Date;
  
 import com.fasterxml.jackson.annotation.JsonProperty;
- 
-import cl.duoc.ms_ventas.Model.Venta;
+
+import cl.duoc.ms_ventas.model.Venta;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

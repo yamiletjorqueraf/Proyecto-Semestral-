@@ -1,6 +1,6 @@
 package cl.duoc.ms_usuario.dto;
 
-import cl.duoc.ms_usuario.Model.Usuario;
+import cl.duoc.ms_usuario.model.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

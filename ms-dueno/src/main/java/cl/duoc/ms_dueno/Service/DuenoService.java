@@ -1,14 +1,14 @@
-package cl.duoc.ms_dueno.Service;
+package cl.duoc.ms_dueno.service;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import cl.duoc.ms_dueno.Client.MascotaClient;
-import cl.duoc.ms_dueno.Client.UsuarioClient;
-import cl.duoc.ms_dueno.Model.Dueno;
-import cl.duoc.ms_dueno.Repository.DuenoRepository;
+import cl.duoc.ms_dueno.client.MascotaClient;
+import cl.duoc.ms_dueno.client.UsuarioClient;
+import cl.duoc.ms_dueno.model.Dueno;
+import cl.duoc.ms_dueno.repository.DuenoRepository;
 
 @Service
 public class DuenoService {

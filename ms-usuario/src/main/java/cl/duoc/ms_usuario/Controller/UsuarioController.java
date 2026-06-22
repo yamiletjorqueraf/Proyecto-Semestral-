@@ -1,4 +1,4 @@
-package cl.duoc.ms_usuario.Controller;
+package cl.duoc.ms_usuario.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cl.duoc.ms_usuario.Model.Usuario;
-import cl.duoc.ms_usuario.Service.UsuarioService;
 import cl.duoc.ms_usuario.dto.UsuarioDTO;
+import cl.duoc.ms_usuario.model.Usuario;
+import cl.duoc.ms_usuario.service.UsuarioService;
 
 
 @RestController

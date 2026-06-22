@@ -1,12 +1,13 @@
 package cl.duoc.ms_ventas.service;
 
-import cl.duoc.ms_ventas.Client.DuenoClient;
-import cl.duoc.ms_ventas.Client.MascotaClient;
-import cl.duoc.ms_ventas.Model.Venta;
-import cl.duoc.ms_ventas.Repository.VentaRepository;
-import cl.duoc.ms_ventas.Service.VentaService;
+import cl.duoc.ms_ventas.client.DuenoClient;
+import cl.duoc.ms_ventas.client.MascotaClient;
 import cl.duoc.ms_ventas.exception.BadRequestException;
 import cl.duoc.ms_ventas.exception.ResourceNotFoundException;
+import cl.duoc.ms_ventas.model.Venta;
+import cl.duoc.ms_ventas.repository.VentaRepository;
+import cl.duoc.ms_ventas.service.VentaService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,4 +1,4 @@
-package cl.duoc.ms_pago.Service;
+package cl.duoc.ms_pago.service;
 
 import java.util.Date;
 import java.util.List;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 
 import cl.duoc.ms_pago.exception.BadRequestException;
 import cl.duoc.ms_pago.exception.ResourceNotFoundException;
-import cl.duoc.ms_pago.Client.DuenoClient;
-import cl.duoc.ms_pago.Client.VentaClient;
-import cl.duoc.ms_pago.Model.Pago;
-import cl.duoc.ms_pago.Repository.PagoRepository;
+import cl.duoc.ms_pago.model.Pago;
+import cl.duoc.ms_pago.repository.PagoRepository;
+import cl.duoc.ms_pago.client.DuenoClient;
+import cl.duoc.ms_pago.client.VentaClient;
 
 @Service
 public class PagoService {

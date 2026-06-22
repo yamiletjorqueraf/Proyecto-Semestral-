@@ -1,9 +1,10 @@
 package cl.duoc.ms_ventas.assamblers;
 
 
-import cl.duoc.ms_ventas.Controller.VentaController;
-import cl.duoc.ms_ventas.Model.Venta;
+import cl.duoc.ms_ventas.controller.VentaController;
 import cl.duoc.ms_ventas.dto.VentaDTO;
+import cl.duoc.ms_ventas.model.Venta;
+
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;

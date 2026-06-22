@@ -1,4 +1,4 @@
-package cl.duoc.ms_cita.Client;
+package cl.duoc.ms_cita.client;
 
 import org.springframework.cloud.openfeign.FeignClient; 
 import org.springframework.web.bind.annotation.GetMapping;

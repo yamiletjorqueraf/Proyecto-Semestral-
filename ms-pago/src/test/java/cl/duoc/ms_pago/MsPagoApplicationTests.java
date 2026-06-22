@@ -1,12 +1,13 @@
 package cl.duoc.ms_pago;
 
-import cl.duoc.ms_pago.Client.DuenoClient;
-import cl.duoc.ms_pago.Client.VentaClient;
-import cl.duoc.ms_pago.Model.Pago;
-import cl.duoc.ms_pago.Repository.PagoRepository;
-import cl.duoc.ms_pago.Service.PagoService;
+import cl.duoc.ms_pago.client.DuenoClient;
+import cl.duoc.ms_pago.client.VentaClient;
 import cl.duoc.ms_pago.exception.BadRequestException;
 import cl.duoc.ms_pago.exception.ResourceNotFoundException;
+import cl.duoc.ms_pago.model.Pago;
+import cl.duoc.ms_pago.repository.PagoRepository;
+import cl.duoc.ms_pago.service.PagoService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

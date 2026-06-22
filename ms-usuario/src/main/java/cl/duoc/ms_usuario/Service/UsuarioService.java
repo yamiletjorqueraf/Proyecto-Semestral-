@@ -1,4 +1,4 @@
-package cl.duoc.ms_usuario.Service;
+package cl.duoc.ms_usuario.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import cl.duoc.ms_usuario.Model.Usuario;
-import cl.duoc.ms_usuario.Repository.UsuarioRepository;
+import cl.duoc.ms_usuario.model.Usuario;
+import cl.duoc.ms_usuario.repository.UsuarioRepository;
 
 
 @Service

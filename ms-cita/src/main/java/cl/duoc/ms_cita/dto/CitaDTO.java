@@ -2,7 +2,7 @@ package cl.duoc.ms_cita.dto;
 
 import java.time.LocalDateTime;
 
-import cl.duoc.ms_cita.Model.Cita;
+import cl.duoc.ms_cita.model.Cita;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

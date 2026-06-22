@@ -6,11 +6,12 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-import cl.duoc.ms_ventas.Controller.VentaController;
-import cl.duoc.ms_ventas.Model.Venta;
-import cl.duoc.ms_ventas.Service.VentaService;
 import cl.duoc.ms_ventas.assamblers.VentaModelAssembler;
+import cl.duoc.ms_ventas.controller.VentaController;
 import cl.duoc.ms_ventas.dto.VentaDTO;
+import cl.duoc.ms_ventas.model.Venta;
+import cl.duoc.ms_ventas.service.VentaService;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

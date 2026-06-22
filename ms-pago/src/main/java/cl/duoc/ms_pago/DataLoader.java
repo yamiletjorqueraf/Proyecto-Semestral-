@@ -1,7 +1,7 @@
 package cl.duoc.ms_pago;
 
-import cl.duoc.ms_pago.Model.Pago;
-import cl.duoc.ms_pago.Repository.PagoRepository;
+import cl.duoc.ms_pago.model.Pago;
+import cl.duoc.ms_pago.repository.PagoRepository;
 import net.datafaker.Faker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

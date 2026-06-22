@@ -1,9 +1,9 @@
-package cl.duoc.ms_ventas.Controller;
+package cl.duoc.ms_ventas.controller;
 
-import cl.duoc.ms_ventas.Model.Venta;
-import cl.duoc.ms_ventas.Service.VentaService;
 import cl.duoc.ms_ventas.assamblers.VentaModelAssembler;
 import cl.duoc.ms_ventas.dto.VentaDTO;
+import cl.duoc.ms_ventas.model.Venta;
+import cl.duoc.ms_ventas.service.VentaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;

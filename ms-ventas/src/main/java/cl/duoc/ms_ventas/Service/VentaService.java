@@ -1,11 +1,12 @@
-package cl.duoc.ms_ventas.Service;
+package cl.duoc.ms_ventas.service;
 
-import cl.duoc.ms_ventas.Client.DuenoClient;
-import cl.duoc.ms_ventas.Client.MascotaClient;
-import cl.duoc.ms_ventas.Model.Venta;
-import cl.duoc.ms_ventas.Repository.VentaRepository;
+import cl.duoc.ms_ventas.client.DuenoClient;
+import cl.duoc.ms_ventas.client.MascotaClient;
 import cl.duoc.ms_ventas.exception.BadRequestException;
 import cl.duoc.ms_ventas.exception.ResourceNotFoundException;
+import cl.duoc.ms_ventas.model.Venta;
+import cl.duoc.ms_ventas.repository.VentaRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
