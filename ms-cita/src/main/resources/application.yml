@@ -1,6 +1,15 @@
 spring:
   application:
     name: ms-cita
+  datasource:
+    url: jdbc:mysql://localhost:3306/vet_cita_db?createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: root
+    password: tu_contraseña
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
 server:
   port: 8085
