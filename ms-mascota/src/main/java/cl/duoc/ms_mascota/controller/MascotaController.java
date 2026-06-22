@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +24,10 @@ import cl.duoc.ms_mascota.service.MascotaService;
 @RestController
 @RequestMapping("/api/v1/mascota")
 public class MascotaController {
- private final MascotaService mascotaService;
+
+    private static final Logger logger = LoggerFactory.getLogger(MascotaController.class);
+
+    private final MascotaService mascotaService;
 
     public MascotaController(MascotaService mascotaService) {
         this.mascotaService = mascotaService;
@@ -30,43 +35,54 @@ public class MascotaController {
 
     @PostMapping
     public ResponseEntity<MascotaDTO> crearMascota(@RequestBody MascotaDTO dto) {
+        logger.info("POST /api/v1/mascota - Solicitud recibida");
         Mascota nueva = mascotaService.guardar(dto.toModel());
+        logger.info("Mascota creada con id={}", nueva.getIdMascota());
         return ResponseEntity.status(HttpStatus.CREATED).body(MascotaDTO.fromModel(nueva));
     }
 
     @GetMapping
     public ResponseEntity<List<MascotaDTO>> listarMascotas() {
+        logger.info("GET /api/v1/mascota - Solicitud recibida");
         List<Mascota> mascotas = mascotaService.listar();
         List<MascotaDTO> dtos = mascotas.stream().map(MascotaDTO::fromModel).collect(Collectors.toList());
+        logger.info("Total mascotas retornadas: {}", dtos.size());
         return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/{id}/exists")
     public ResponseEntity<Boolean> existeMascota(@PathVariable Long id) {
+        logger.info("GET /api/v1/mascota/{}/exists - Solicitud recibida", id);
         return ResponseEntity.ok(mascotaService.existePorId(id));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<MascotaDTO> buscarPorId(@PathVariable Long id) {
+        logger.info("GET /api/v1/mascota/{} - Solicitud recibida", id);
         Optional<Mascota> mascota = mascotaService.findById(id);
         if (mascota.isPresent()) {
-        return ResponseEntity.ok(
-            MascotaDTO.fromModel(mascota.get())
-        );
+            logger.info("Mascota retornada id={}", id);
+            return ResponseEntity.ok(MascotaDTO.fromModel(mascota.get()));
+        }
+        logger.warn("Mascota no encontrada id={}", id);
+        return ResponseEntity.notFound().build();
     }
 
-    return ResponseEntity.notFound().build();
-}
+
 
     @PutMapping("/{id}")
     public ResponseEntity<MascotaDTO> actualizar(@PathVariable Long id, @RequestBody MascotaDTO dto) {
+        logger.info("PUT /api/v1/mascota/{} - Solicitud recibida", id);
         Mascota actualizada = mascotaService.actualizar(id, dto.toModel());
+        logger.info("Mascota actualizada id={}", id);
         return ResponseEntity.ok(MascotaDTO.fromModel(actualizada));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        logger.info("DELETE /api/v1/mascota/{} - Solicitud recibida", id);
         mascotaService.eliminar(id);
+        logger.info("Mascota eliminada id={}", id);
         return ResponseEntity.noContent().build();
     }
 }
