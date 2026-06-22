@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: ms-personal
+
+server:
+  port: 8084

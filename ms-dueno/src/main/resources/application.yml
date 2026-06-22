@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: ms-dueno
+
+server:
+  port: 8082

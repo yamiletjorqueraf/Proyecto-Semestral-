@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: ms-resultados-examenes
+
+server:
+  port: 8087

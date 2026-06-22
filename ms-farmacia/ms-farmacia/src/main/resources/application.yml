@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: ms-farmacia
+
+server:
+  port: 8088

@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: ms-hospitalizacion
+
+server:
+  port: 8086

@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: ms-ventas
+
+server:
+  port: 8089
