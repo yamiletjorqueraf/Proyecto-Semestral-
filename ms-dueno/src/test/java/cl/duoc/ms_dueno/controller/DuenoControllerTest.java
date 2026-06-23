@@ -6,9 +6,9 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-import cl.duoc.ms_dueno.Controller.DuenoController;
-import cl.duoc.ms_dueno.Model.Dueno;
-import cl.duoc.ms_dueno.Service.DuenoService;
+import cl.duoc.ms_dueno.controller.DuenoController;
+import cl.duoc.ms_dueno.model.Dueno;
+import cl.duoc.ms_dueno.service.DuenoService;
 import cl.duoc.ms_dueno.assamblers.DuenoModelAssembler;
 import cl.duoc.ms_dueno.dto.DuenoDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,10 +1,10 @@
 package cl.duoc.ms_dueno.service;
 
-import cl.duoc.ms_dueno.Client.MascotaClient;
-import cl.duoc.ms_dueno.Client.UsuarioClient;
-import cl.duoc.ms_dueno.Model.Dueno;
-import cl.duoc.ms_dueno.Repository.DuenoRepository;
-import cl.duoc.ms_dueno.Service.DuenoService;
+import cl.duoc.ms_dueno.client.MascotaClient;
+import cl.duoc.ms_dueno.client.UsuarioClient;
+import cl.duoc.ms_dueno.model.Dueno;
+import cl.duoc.ms_dueno.repository.DuenoRepository;
+import cl.duoc.ms_dueno.service.DuenoService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

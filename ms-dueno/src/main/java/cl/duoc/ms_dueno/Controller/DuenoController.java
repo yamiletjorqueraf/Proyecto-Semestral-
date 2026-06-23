@@ -9,7 +9,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-<<<<<<< HEAD
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,23 +19,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.duoc.ms_dueno.assamblers.DuenoModelAssembler;
 import cl.duoc.ms_dueno.dto.DuenoDTO;
 import cl.duoc.ms_dueno.model.Dueno;
 import cl.duoc.ms_dueno.service.DuenoService;
-
-=======
-import org.springframework.web.bind.annotation.*;
- 
-import cl.duoc.ms_dueno.Model.Dueno;
-import cl.duoc.ms_dueno.Service.DuenoService;
-import cl.duoc.ms_dueno.assamblers.DuenoModelAssembler;
-import cl.duoc.ms_dueno.dto.DuenoDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
- 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
- 
->>>>>>> b1c8fd158dc2299516a29540555c2de91b207377
+
+
 @RestController
 @RequestMapping("/api/v1/dueno")
 @Tag(name = "Dueños", description = "Operaciones del microservicio de dueños")
