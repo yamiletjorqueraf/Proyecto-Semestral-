@@ -22,4 +22,13 @@ call .\mvnw clean
 cd ../ms-pago
 call .\mvnw clean
 
+cd ../ms-farmacia
+call .\mvnw clean
+
+cd ../ms-hospitalizacion
+call .\mvnw clean
+
+cd ../ms-resultados-examenes
+call .\mvnw clean
+
 cd ..
