@@ -1,5 +1,5 @@
-package cl.duoc.ms_dueno.controller;
-
+package cl.duoc.ms_dueno.Controller;
+ 
 import java.util.List;
 import java.util.stream.Collectors;
  
@@ -9,24 +9,19 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
+ 
+import cl.duoc.ms_dueno.Model.Dueno;
+import cl.duoc.ms_dueno.Service.DuenoService;
 import cl.duoc.ms_dueno.assamblers.DuenoModelAssembler;
 import cl.duoc.ms_dueno.dto.DuenoDTO;
-import cl.duoc.ms_dueno.model.Dueno;
-import cl.duoc.ms_dueno.service.DuenoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
-
+ 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+ 
 @RestController
 @RequestMapping("/api/v1/dueno")
 @Tag(name = "Dueños", description = "Operaciones del microservicio de dueños")
@@ -44,6 +39,11 @@ public class DuenoController {
  
     @PostMapping
     @Operation(summary = "Crear dueño")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Dueño creado exitosamente"),
+        @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<EntityModel<DuenoDTO>> crearDueno(@RequestBody DuenoDTO duenoDto) {
         logger.info("POST /api/v1/dueno - Solicitud recibida");
         Dueno nuevo = duenoService.guardar(duenoDto.toModel());
@@ -53,6 +53,10 @@ public class DuenoController {
  
     @GetMapping
     @Operation(summary = "Listar dueños")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista de dueños retornada exitosamente"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<CollectionModel<EntityModel<DuenoDTO>>> listarUsuarios() {
         logger.info("GET /api/v1/dueno - Solicitud recibida");
         List<EntityModel<DuenoDTO>> duenos = duenoService.listar().stream()
@@ -65,6 +69,10 @@ public class DuenoController {
  
     @GetMapping("/{id}/exists")
     @Operation(summary = "Verificar si existe un dueño")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Verificación exitosa"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<Boolean> existeUsuario(@PathVariable Long id) {
         logger.info("GET /api/v1/dueno/{}/exists - Solicitud recibida", id);
         return ResponseEntity.ok(duenoService.existePorId(id));
@@ -72,6 +80,11 @@ public class DuenoController {
  
     @GetMapping("/{id}")
     @Operation(summary = "Obtener dueño por ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Dueño encontrado"),
+        @ApiResponse(responseCode = "404", description = "Dueño no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<EntityModel<DuenoDTO>> buscarPorId(@PathVariable Long id) {
         logger.info("GET /api/v1/dueno/{} - Solicitud recibida", id);
         return duenoService.findById(id)
@@ -83,6 +96,12 @@ public class DuenoController {
  
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar dueño")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Dueño actualizado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Dueño no encontrado"),
+        @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<EntityModel<DuenoDTO>> actualizar(@PathVariable Long id, @RequestBody DuenoDTO dto) {
         logger.info("PUT /api/v1/dueno/{} - Solicitud recibida", id);
         Dueno actualizado = duenoService.actualizar(id, dto.toModel());
@@ -92,6 +111,11 @@ public class DuenoController {
  
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar dueño")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Dueño eliminado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Dueño no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<EntityModel<Void>> eliminar(@PathVariable Long id) {
         logger.info("DELETE /api/v1/dueno/{} - Solicitud recibida", id);
         duenoService.eliminar(id);

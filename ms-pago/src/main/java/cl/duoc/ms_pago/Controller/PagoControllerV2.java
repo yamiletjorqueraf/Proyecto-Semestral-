@@ -1,5 +1,5 @@
-package cl.duoc.ms_pago.controller;
-
+package cl.duoc.ms_pago.Controller;
+ 
 import java.util.List;
 import java.util.stream.Collectors;
  
@@ -7,16 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
  
 import cl.duoc.ms_pago.dto.PagoDTO;
-import cl.duoc.ms_pago.model.Pago;
-import cl.duoc.ms_pago.service.PagoService;
+import cl.duoc.ms_pago.Model.Pago;
 import cl.duoc.ms_pago.assamblers.PagoModelAssembler;
+import cl.duoc.ms_pago.Service.PagoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
  
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -37,20 +36,26 @@ public class PagoControllerV2 {
     }
  
     @GetMapping
-    @Operation(summary = "Listar todos los pagos V2", description = "Retorna lista de pagos con links HATEOAS")
+    @Operation(summary = "Listar todos los pagos V2")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista retornada exitosamente"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public CollectionModel<EntityModel<PagoDTO>> listarPagos() {
         logger.info("V2 GET /api/v2/pagos - Listando pagos");
- 
         List<EntityModel<PagoDTO>> pagos = pagoService.listar().stream()
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
- 
+                .map(assembler::toModel).collect(Collectors.toList());
         return CollectionModel.of(pagos,
                 linkTo(methodOn(PagoControllerV2.class).listarPagos()).withSelfRel());
     }
  
     @GetMapping("/{id}")
-    @Operation(summary = "Obtener pago por ID V2", description = "Retorna un pago con links HATEOAS")
+    @Operation(summary = "Obtener pago por ID V2")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Pago encontrado"),
+        @ApiResponse(responseCode = "404", description = "Pago no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public EntityModel<PagoDTO> obtenerPago(@PathVariable Long id) {
         logger.info("V2 GET /api/v2/pagos/{} - Obteniendo pago", id);
         Pago pago = pagoService.obtenerPorId(id);

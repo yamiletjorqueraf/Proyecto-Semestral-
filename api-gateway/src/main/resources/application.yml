@@ -6,44 +6,45 @@ spring:
       mvc:
         routes:
           - id: ms-usuario
-            uri: http://localhost:8091
+            uri: http://ms-usuario:8091
             predicates:
               - Path=/api/v1/usuario/**
           - id: ms-dueno
-            uri: http://localhost:8082
+            uri: http://ms-dueno:8082
             predicates:
               - Path=/api/v1/dueno/**
           - id: ms-mascota
-            uri: http://localhost:8083
+            uri: http://ms-mascota:8083
             predicates:
               - Path=/api/v1/mascota/**
           - id: ms-personal
-            uri: http://localhost:8084
+            uri: http://ms-personal:8085
             predicates:
-              - Path=/api/v1/personal/**    
+              - Path=/api/v1/personal/**
           - id: ms-cita
-            uri: http://localhost:8085
+            uri: http://ms-cita:8084
             predicates:
               - Path=/api/v1/cita/**
           - id: ms-hospitalizacion
-            uri: http://localhost:8086
+            uri: http://ms-hospitalizacion:8086
             predicates:
               - Path=/api/v1/hospitalizacion/**
           - id: ms-resultados-examenes
-            uri: http://localhost:8087
+            uri: http://ms-resultados-examenes:8087
             predicates:
               - Path=/api/v1/resultados/**
           - id: ms-farmacia
-            uri: http://localhost:8088
+            uri: http://ms-farmacia:8088
             predicates:
               - Path=/api/v1/farmacia/**
           - id: ms-ventas
-            uri: http://localhost:8089
+            uri: http://ms-ventas:8089
             predicates:
               - Path=/api/v1/ventas/**
           - id: ms-pago
-            uri: http://localhost:8090
+            uri: http://ms-pago:8090
             predicates:
-              - Path=/api/v1/pago/**
+              - Path=/api/v1/pagos/**
+
 server:
   port: 8080

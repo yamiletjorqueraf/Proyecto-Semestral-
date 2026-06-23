@@ -1,5 +1,5 @@
 package cl.duoc.ms_personal.controller;
-
+ 
 import java.util.List;
 import java.util.stream.Collectors;
  
@@ -14,6 +14,8 @@ import cl.duoc.ms_personal.dto.PersonalDTO;
 import cl.duoc.ms_personal.model.Personal;
 import cl.duoc.ms_personal.service.PersonalService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
  
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -35,17 +37,25 @@ public class PersonalControllerV2 {
  
     @GetMapping
     @Operation(summary = "Listar personal V2")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista retornada exitosamente"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public CollectionModel<EntityModel<PersonalDTO>> listarPersonal() {
         logger.info("V2 GET /api/v2/personal - Listando personal");
         List<EntityModel<PersonalDTO>> lista = personalService.listar().stream()
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
+                .map(assembler::toModel).collect(Collectors.toList());
         return CollectionModel.of(lista,
                 linkTo(methodOn(PersonalControllerV2.class).listarPersonal()).withSelfRel());
     }
  
     @GetMapping("/{id}")
     @Operation(summary = "Obtener personal por ID V2")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Personal encontrado"),
+        @ApiResponse(responseCode = "404", description = "Personal no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public EntityModel<PersonalDTO> obtenerPersonal(@PathVariable Long id) {
         logger.info("V2 GET /api/v2/personal/{} - Obteniendo personal", id);
         Personal personal = personalService.findById(id)

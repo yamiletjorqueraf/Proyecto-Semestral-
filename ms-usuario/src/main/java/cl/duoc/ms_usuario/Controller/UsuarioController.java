@@ -1,91 +1,132 @@
-package cl.duoc.ms_usuario.controller;
-
+package cl.duoc.ms_usuario.Controller;
+ 
 import java.util.List;
 import java.util.stream.Collectors;
-
+ 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
+ 
+import cl.duoc.ms_usuario.Assamblers.UsuarioModelAssembler;
+import cl.duoc.ms_usuario.Model.Usuario;
+import cl.duoc.ms_usuario.Service.UsuarioService;
 import cl.duoc.ms_usuario.dto.UsuarioDTO;
-import cl.duoc.ms_usuario.model.Usuario;
-import cl.duoc.ms_usuario.service.UsuarioService;
-
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+ 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+ 
 @RestController
 @RequestMapping("/api/v1/usuario")
+@Tag(name = "Usuarios", description = "Operaciones del microservicio de usuarios")
 public class UsuarioController {
-
+ 
     private static final Logger logger = LoggerFactory.getLogger(UsuarioController.class);
-
+ 
     private final UsuarioService usuarioService;
-
-    public UsuarioController(UsuarioService usuarioService) {
-		this.usuarioService = usuarioService;
-	}
-
+    private final UsuarioModelAssembler assembler;
+ 
+    public UsuarioController(UsuarioService usuarioService, UsuarioModelAssembler assembler) {
+        this.usuarioService = usuarioService;
+        this.assembler = assembler;
+    }
+ 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> crearUsuario(@RequestBody UsuarioDTO usuarioDto) {
+    @Operation(summary = "Crear usuario", description = "Registra un nuevo usuario")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Usuario creado exitosamente"),
+        @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<EntityModel<UsuarioDTO>> crearUsuario(@RequestBody UsuarioDTO usuarioDto) {
         logger.info("POST /api/v1/usuario - Solicitud recibida");
         Usuario nuevo = usuarioService.guardar(usuarioDto.toModel());
         logger.info("Usuario creado con id={}", nuevo.getIdUsuario());
-        return ResponseEntity.status(HttpStatus.CREATED).body(UsuarioDTO.fromModel(nuevo));
+        return ResponseEntity.status(HttpStatus.CREATED).body(assembler.toModel(nuevo));
     }
-
+ 
     @GetMapping
-    public ResponseEntity<List<UsuarioDTO>> listarUsuarios() {
+    @Operation(summary = "Listar usuarios", description = "Retorna todos los usuarios")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista de usuarios retornada exitosamente"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<CollectionModel<EntityModel<UsuarioDTO>>> listarUsuarios() {
         logger.info("GET /api/v1/usuario - Solicitud recibida");
-        List<Usuario> usuarios = usuarioService.listar();
-        List<UsuarioDTO> dtos = usuarios.stream().map(UsuarioDTO::fromModel).collect(Collectors.toList());
-        logger.info("Total usuarios retornados: {}", dtos.size());
-        return ResponseEntity.ok(dtos);
+        List<EntityModel<UsuarioDTO>> usuarios = usuarioService.listar().stream()
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
+        CollectionModel<EntityModel<UsuarioDTO>> collection = CollectionModel.of(usuarios,
+                linkTo(methodOn(UsuarioController.class).listarUsuarios()).withSelfRel());
+        logger.info("Total usuarios retornados: {}", usuarios.size());
+        return ResponseEntity.ok(collection);
     }
-
+ 
     @GetMapping("/{id}/exists")
+    @Operation(summary = "Verificar si existe un usuario")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Verificación exitosa"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<Boolean> existeUsuario(@PathVariable Long id) {
         logger.info("GET /api/v1/usuario/{}/exists - Solicitud recibida", id);
         return ResponseEntity.ok(usuarioService.existePorId(id));
     }
-
+ 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable Long id) {
+    @Operation(summary = "Obtener usuario por ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Usuario encontrado"),
+        @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<EntityModel<UsuarioDTO>> buscarPorId(@PathVariable Long id) {
         logger.info("GET /api/v1/usuario/{} - Solicitud recibida", id);
         return usuarioService.findById(id)
                 .map(u -> {
                     logger.info("Usuario retornado id={}", id);
-                    return ResponseEntity.ok(UsuarioDTO.fromModel(u));
+                    return ResponseEntity.ok(assembler.toModel(u));
                 })
                 .orElseGet(() -> {
                     logger.warn("Usuario no encontrado id={}", id);
                     return ResponseEntity.notFound().build();
                 });
     }
-
-    
+ 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> actualizar(@PathVariable Long id, @RequestBody UsuarioDTO dto) {
+    @Operation(summary = "Actualizar usuario")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Usuario actualizado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
+        @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<EntityModel<UsuarioDTO>> actualizar(@PathVariable Long id, @RequestBody UsuarioDTO dto) {
         logger.info("PUT /api/v1/usuario/{} - Solicitud recibida", id);
         Usuario actualizado = usuarioService.actualizar(id, dto.toModel());
         logger.info("Usuario actualizado id={}", id);
-        return ResponseEntity.ok(UsuarioDTO.fromModel(actualizado));
+        return ResponseEntity.ok(assembler.toModel(actualizado));
     }
-
-    
+ 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    @Operation(summary = "Eliminar usuario")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Usuario eliminado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<EntityModel<Void>> eliminar(@PathVariable Long id) {
         logger.info("DELETE /api/v1/usuario/{} - Solicitud recibida", id);
         usuarioService.eliminar(id);
+        EntityModel<Void> model = EntityModel.of(null,
+                linkTo(methodOn(UsuarioController.class).listarUsuarios()).withRel("todos-los-usuarios"));
         logger.info("Usuario eliminado id={}", id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(model);
     }
-
 }

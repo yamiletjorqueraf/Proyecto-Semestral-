@@ -1,5 +1,5 @@
 package cl.duoc.ms_personal.controller;
-
+ 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,6 +17,8 @@ import cl.duoc.ms_personal.dto.PersonalDTO;
 import cl.duoc.ms_personal.model.Personal;
 import cl.duoc.ms_personal.service.PersonalService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
  
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -38,6 +40,11 @@ public class PersonalController {
  
     @PostMapping
     @Operation(summary = "Crear personal")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Personal creado exitosamente"),
+        @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<EntityModel<PersonalDTO>> crearPersonal(@RequestBody PersonalDTO dto) {
         logger.info("POST /api/v1/personal - Solicitud recibida");
         Personal nuevo = personalService.guardar(dto.toModel());
@@ -47,6 +54,10 @@ public class PersonalController {
  
     @GetMapping
     @Operation(summary = "Listar personal")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista de personal retornada exitosamente"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<CollectionModel<EntityModel<PersonalDTO>>> listarPersonal() {
         logger.info("GET /api/v1/personal - Solicitud recibida");
         List<EntityModel<PersonalDTO>> lista = personalService.listar().stream()
@@ -59,6 +70,10 @@ public class PersonalController {
  
     @GetMapping("/{id}/exists")
     @Operation(summary = "Verificar si existe personal")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Verificación exitosa"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<Boolean> existePersonal(@PathVariable Long id) {
         logger.info("GET /api/v1/personal/{}/exists - Solicitud recibida", id);
         return ResponseEntity.ok(personalService.existePorId(id));
@@ -66,6 +81,11 @@ public class PersonalController {
  
     @GetMapping("/{id}")
     @Operation(summary = "Obtener personal por ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Personal encontrado"),
+        @ApiResponse(responseCode = "404", description = "Personal no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<EntityModel<PersonalDTO>> buscarPorId(@PathVariable Long id) {
         logger.info("GET /api/v1/personal/{} - Solicitud recibida", id);
         Optional<Personal> personal = personalService.findById(id);
@@ -79,6 +99,12 @@ public class PersonalController {
  
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar personal")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Personal actualizado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Personal no encontrado"),
+        @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<EntityModel<PersonalDTO>> actualizar(@PathVariable Long id, @RequestBody PersonalDTO dto) {
         logger.info("PUT /api/v1/personal/{} - Solicitud recibida", id);
         Personal actualizado = personalService.actualizar(id, dto.toModel());
@@ -88,6 +114,11 @@ public class PersonalController {
  
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar personal")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Personal eliminado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Personal no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<EntityModel<Void>> eliminar(@PathVariable Long id) {
         logger.info("DELETE /api/v1/personal/{} - Solicitud recibida", id);
         personalService.eliminar(id);

@@ -1,5 +1,5 @@
 package cl.duoc.ms_usuario.Controller;
-
+ 
 import java.util.List;
 import java.util.stream.Collectors;
  
@@ -8,15 +8,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
-
+ 
 import cl.duoc.ms_usuario.Assamblers.UsuarioModelAssembler;
-
-
-
+import cl.duoc.ms_usuario.Model.Usuario;
+import cl.duoc.ms_usuario.Service.UsuarioService;
 import cl.duoc.ms_usuario.dto.UsuarioDTO;
-import cl.duoc.ms_usuario.model.Usuario;
-import cl.duoc.ms_usuario.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
  
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -38,6 +37,10 @@ public class UsuariocontrollerV2 {
  
     @GetMapping
     @Operation(summary = "Listar usuarios V2")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista de usuarios retornada exitosamente"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public CollectionModel<EntityModel<UsuarioDTO>> listarUsuarios() {
         logger.info("V2 GET /api/v2/usuario - Listando usuarios");
         List<EntityModel<UsuarioDTO>> usuarios = usuarioService.listar().stream()
@@ -49,6 +52,11 @@ public class UsuariocontrollerV2 {
  
     @GetMapping("/{id}")
     @Operation(summary = "Obtener usuario por ID V2")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Usuario encontrado"),
+        @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public EntityModel<UsuarioDTO> obtenerUsuario(@PathVariable Long id) {
         logger.info("V2 GET /api/v2/usuario/{} - Obteniendo usuario", id);
         Usuario usuario = usuarioService.findById(id)
