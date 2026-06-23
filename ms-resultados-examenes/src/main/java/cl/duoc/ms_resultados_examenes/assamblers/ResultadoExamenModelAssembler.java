@@ -13,13 +13,21 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 public class ResultadoExamenModelAssembler implements RepresentationModelAssembler<ResultadoExamen, EntityModel<ResultadoExamenDTO>> {
 
     @Override
-    public EntityModel<ResultadoExamenDTO> toModel(ResultadoExamen entity) {
-        ResultadoExamenDTO dto = entity.toDto();
+public EntityModel<ResultadoExamenDTO> toModel(ResultadoExamen entity) {
+    // Reemplazamos entity.toDto() por el mapeo manual de los campos
+    ResultadoExamenDTO dto = new ResultadoExamenDTO();
+    dto.setIdResultado(entity.getIdResultado());
+    dto.setIdMascota(entity.getIdMascota());
+    dto.setTipoExamen(entity.getTipoExamen());
+    dto.setFechaExamen(entity.getFechaExamen());
+    dto.setResultado(entity.getResultado());
+    dto.setIdPersonal(entity.getIdPersonal());
+    dto.setPersonalCargo(entity.getPersonalCargo());
 
-        return EntityModel.of(dto,
-                linkTo(methodOn(ResultadoExamenController.class).buscarPorId(entity.getIdResultado())).withSelfRel(),
-                linkTo(methodOn(ResultadoExamenController.class).listarResultados()).withRel("todos-los-resultados"),
-                linkTo(methodOn(ResultadoExamenController.class).eliminar(entity.getIdResultado())).withRel("eliminar")
-        );
-    }
+    return EntityModel.of(dto,
+            linkTo(methodOn(ResultadoExamenController.class).buscarPorId(entity.getIdResultado())).withSelfRel(),
+            linkTo(methodOn(ResultadoExamenController.class).listarResultados()).withRel("todos-los-resultados"),
+            linkTo(methodOn(ResultadoExamenController.class).eliminar(entity.getIdResultado())).withRel("eliminar")
+    );
+}
 }

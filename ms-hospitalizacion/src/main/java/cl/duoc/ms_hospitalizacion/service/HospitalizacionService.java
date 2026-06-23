@@ -1,58 +1,61 @@
 package cl.duoc.ms_hospitalizacion.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cl.duoc.ms_hospitalizacion.dto.HospitalizacionDTO;
-import cl.duoc.ms_hospitalizacion.exception.ResourceNotFoundException;
 import cl.duoc.ms_hospitalizacion.model.Hospitalizacion;
 import cl.duoc.ms_hospitalizacion.repository.HospitalizacionRepository;
+import cl.duoc.ms_hospitalizacion.exception.ResourceNotFoundException;
 
 @Service
 public class HospitalizacionService {
- @Autowired
-    private HospitalizacionRepository repository;
 
-    public HospitalizacionDTO guardar(HospitalizacionDTO dto) {
-        Hospitalizacion entity = modelMapper(dto);
-        Hospitalizacion guardado = repository.save(entity);
-        return dtoMapper(guardado);
+    @Autowired
+    private HospitalizacionRepository hospitalizacionRepository;
+
+   
+    public Hospitalizacion guardar(HospitalizacionDTO dto) {
+        Hospitalizacion h = dto.toModel();
+        return hospitalizacionRepository.save(h);
     }
 
-    public List<HospitalizacionDTO> obtenerTodos() {
-        return repository.findAll().stream()
-                .map(this::dtoMapper)
-                .collect(Collectors.toList());
+    public List<Hospitalizacion> listar() {
+        return hospitalizacionRepository.findAll();
     }
 
-    public HospitalizacionDTO obtenerPorId(Long id) {
-        Hospitalizacion entity = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Hospitalización no encontrada con ID: " + id));
-        return dtoMapper(entity);
+    // Busca opcionalmente por ID
+    public Optional<Hospitalizacion> findById(Long id) {
+        return hospitalizacionRepository.findById(id);
     }
 
-    private Hospitalizacion modelMapper(HospitalizacionDTO dto) {
-        Hospitalizacion h = new Hospitalizacion();
-        h.setIdHospitalizacion(dto.getIdHospitalizacion());
-        h.setIdMascota(dto.getIdMascota());
-        h.setIdDueno(dto.getIdDueno());
-        h.setFecha_inicio(dto.getFecha_inicio());
-        h.setFecha_alta(dto.getFecha_alta());
-        h.setDiagnostico(dto.getDiagnostico());
-        return h;
+    // Actualiza los datos controlando si el ID no existe
+    public Hospitalizacion actualizar(Long id, Hospitalizacion datosNuevos) {
+        return hospitalizacionRepository.findById(id)
+                .map(h -> {
+                    h.setIdMascota(datosNuevos.getIdMascota());
+                    h.setIdDueno(datosNuevos.getIdDueno());
+                    h.setFecha_inicio(datosNuevos.getFecha_inicio());
+                    h.setFecha_alta(datosNuevos.getFecha_alta());
+                    h.setDiagnostico(datosNuevos.getDiagnostico());
+                    return hospitalizacionRepository.save(h);
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("Registro de hospitalización no encontrado con ID: " + id));
     }
 
-    private HospitalizacionDTO dtoMapper(Hospitalizacion h) {
-        HospitalizacionDTO dto = new HospitalizacionDTO();
-        dto.setIdHospitalizacion(h.getIdHospitalizacion());
-        dto.setIdMascota(h.getIdMascota());
-        dto.setIdDueno(h.getIdDueno());
-        dto.setFecha_inicio(h.getFecha_inicio());
-        dto.setFecha_alta(h.getFecha_alta());
-        dto.setDiagnostico(h.getDiagnostico());
-        return dto;
+    // Elimina verificando existencia previa con el operador '!'
+    public void eliminar(Long id) {
+        if (!hospitalizacionRepository.existsById(id)) {
+            throw new ResourceNotFoundException("No se puede eliminar, ID inexistente: " + id);
+        }
+        hospitalizacionRepository.deleteById(id);
+    }
+
+    // Verifica si existe (Usado por el endpoint /exists)
+    public boolean existePorId(Long id) {
+        return hospitalizacionRepository.existsById(id);
     }
 }
