@@ -10,10 +10,12 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
 import cl.duoc.ms_usuario.Assamblers.UsuarioModelAssembler;
-import cl.duoc.ms_usuario.Model.Usuario;
-import cl.duoc.ms_usuario.Service.UsuarioService;
+
+
 
 import cl.duoc.ms_usuario.dto.UsuarioDTO;
+import cl.duoc.ms_usuario.model.Usuario;
+import cl.duoc.ms_usuario.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
  

@@ -1,8 +1,10 @@
 package cl.duoc.ms_dueno.assamblers;
 
-import cl.duoc.ms_dueno.Controller.DuenoController;
-import cl.duoc.ms_dueno.Model.Dueno;
+
+import cl.duoc.ms_dueno.controller.DuenoController;
 import cl.duoc.ms_dueno.dto.DuenoDTO;
+import cl.duoc.ms_dueno.model.Dueno;
+
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
