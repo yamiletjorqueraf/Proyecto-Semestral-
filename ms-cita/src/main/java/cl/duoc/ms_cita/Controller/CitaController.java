@@ -2,87 +2,96 @@ package cl.duoc.ms_cita.Controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+ 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
+ 
 import cl.duoc.ms_cita.Model.Cita;
 import cl.duoc.ms_cita.Service.CitaService;
+import cl.duoc.ms_cita.assamblers.CitaModelAssembler;
 import cl.duoc.ms_cita.dto.CitaDTO;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+ 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+ 
 @RestController
 @RequestMapping("/api/v1/cita")
+@Tag(name = "Citas", description = "Operaciones del microservicio de citas")
 public class CitaController {
-
+ 
     private static final Logger logger = LoggerFactory.getLogger(CitaController.class);
-
+ 
     private final CitaService citaService;
-
-    public CitaController(CitaService citaService) {
+    private final CitaModelAssembler assembler;
+ 
+    public CitaController(CitaService citaService, CitaModelAssembler assembler) {
         this.citaService = citaService;
+        this.assembler = assembler;
     }
-
+ 
     @PostMapping
-    public ResponseEntity<CitaDTO> crearCita(@RequestBody CitaDTO citaDto) {
+    @Operation(summary = "Crear cita")
+    public ResponseEntity<EntityModel<CitaDTO>> crearCita(@RequestBody CitaDTO citaDto) {
         logger.info("POST /api/v1/cita - Solicitud recibida");
         Cita nueva = citaService.guardar(citaDto.toModel());
         logger.info("Cita creada con id={}", nueva.getIdCita());
-        return ResponseEntity.status(HttpStatus.CREATED).body(CitaDTO.fromModel(nueva));
+        return ResponseEntity.status(HttpStatus.CREATED).body(assembler.toModel(nueva));
     }
-
+ 
     @GetMapping
-    public ResponseEntity<List<CitaDTO>> listarCitas() {
+    @Operation(summary = "Listar citas")
+    public ResponseEntity<CollectionModel<EntityModel<CitaDTO>>> listarCitas() {
         logger.info("GET /api/v1/cita - Solicitud recibida");
-        List<Cita> citas = citaService.listar();
-        List<CitaDTO> dtos = citas.stream().map(CitaDTO::fromModel).collect(Collectors.toList());
-        logger.info("Total citas retornadas: {}", dtos.size());
-        return ResponseEntity.ok(dtos);
+        List<EntityModel<CitaDTO>> citas = citaService.listar().stream()
+                .map(assembler::toModel).collect(Collectors.toList());
+        CollectionModel<EntityModel<CitaDTO>> collection = CollectionModel.of(citas,
+                linkTo(methodOn(CitaController.class).listarCitas()).withSelfRel());
+        logger.info("Total citas retornadas: {}", citas.size());
+        return ResponseEntity.ok(collection);
     }
-
+ 
     @GetMapping("/{id}/exists")
+    @Operation(summary = "Verificar si existe cita")
     public ResponseEntity<Boolean> existeCita(@PathVariable Long id) {
         logger.info("GET /api/v1/cita/{}/exists - Solicitud recibida", id);
         return ResponseEntity.ok(citaService.existePorId(id));
     }
-
+ 
     @GetMapping("/{id}")
-    public ResponseEntity<CitaDTO> buscarPorId(@PathVariable Long id) {
+    @Operation(summary = "Obtener cita por ID")
+    public ResponseEntity<EntityModel<CitaDTO>> buscarPorId(@PathVariable Long id) {
         logger.info("GET /api/v1/cita/{} - Solicitud recibida", id);
         return citaService.findById(id)
-                .map(c -> {
-                    logger.info("Cita retornada id={}", id);
-                    return ResponseEntity.ok(CitaDTO.fromModel(c));
-                })
-                .orElseGet(() -> {
-                    logger.warn("Cita no encontrada id={}", id);
-                    return ResponseEntity.notFound().build();
-                });
+                .map(c -> { logger.info("Cita retornada id={}", id);
+                    return ResponseEntity.ok(assembler.toModel(c)); })
+                .orElseGet(() -> { logger.warn("Cita no encontrada id={}", id);
+                    return ResponseEntity.notFound().build(); });
     }
-
+ 
     @PutMapping("/{id}")
-    public ResponseEntity<CitaDTO> actualizar(@PathVariable Long id, @RequestBody CitaDTO dto) {
+    @Operation(summary = "Actualizar cita")
+    public ResponseEntity<EntityModel<CitaDTO>> actualizar(@PathVariable Long id, @RequestBody CitaDTO dto) {
         logger.info("PUT /api/v1/cita/{} - Solicitud recibida", id);
         Cita actualizada = citaService.actualizar(id, dto.toModel());
         logger.info("Cita actualizada id={}", id);
-        return ResponseEntity.ok(CitaDTO.fromModel(actualizada));
+        return ResponseEntity.ok(assembler.toModel(actualizada));
     }
-
+ 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    @Operation(summary = "Eliminar cita")
+    public ResponseEntity<EntityModel<Void>> eliminar(@PathVariable Long id) {
         logger.info("DELETE /api/v1/cita/{} - Solicitud recibida", id);
         citaService.eliminar(id);
+        EntityModel<Void> model = EntityModel.of(null,
+                linkTo(methodOn(CitaController.class).listarCitas()).withRel("todas-las-citas"));
         logger.info("Cita eliminada id={}", id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(model);
     }
     
 
