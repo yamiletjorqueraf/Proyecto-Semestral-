@@ -18,11 +18,11 @@ spring:
             predicates:
               - Path=/api/v1/mascota/**
           - id: ms-personal
-            uri: http://localhost:8084
-            predicates:
-              - Path=/api/v1/personal/**    
-          - id: ms-cita
             uri: http://localhost:8085
+            predicates:
+              - Path=/api/v1/personal/**
+          - id: ms-cita
+            uri: http://localhost:8084
             predicates:
               - Path=/api/v1/cita/**
           - id: ms-hospitalizacion
@@ -44,6 +44,7 @@ spring:
           - id: ms-pago
             uri: http://localhost:8090
             predicates:
-              - Path=/api/v1/pago/**
+              - Path=/api/v1/pagos/**
+ 
 server:
   port: 8080
