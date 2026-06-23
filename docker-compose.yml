@@ -158,6 +158,54 @@ services:
         condition: service_started
     networks:
       - veterinaria-net
+    
+     ms-hospitalizacion:
+    build: ./ms-hospitalizacion
+    container_name: ms-hospitalizacion
+    restart: on-failure
+    ports:
+      - "8086:8086"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_hospitalizacion?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - veterinaria-net
+
+  ms-resultados-examenes:
+    build: ./ms-resultados-examenes
+    container_name: ms-resultados-examenes
+    restart: on-failure
+    ports:
+      - "8087:8087"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_resultados?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - veterinaria-net
+
+  ms-farmacia:
+    build: ./ms-farmacia
+    container_name: ms-farmacia
+    restart: on-failure
+    ports:
+      - "8088:8088"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_farmacia?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - veterinaria-net
 
     # ─── API GATEWAY ──────────────────────────────────────────────
   api-gateway:
@@ -174,6 +222,9 @@ services:
       - ms-cita
       - ms-ventas
       - ms-pago
+      - ms-hospitalizacion        
+      - ms-resultados-examenes    
+      - ms-farmacia
     
     networks:
       - veterinaria-net
