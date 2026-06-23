@@ -1,5 +1,5 @@
 package cl.duoc.ms_cita.Controller;
-
+ 
 import java.util.List;
 import java.util.stream.Collectors;
  
@@ -16,6 +16,8 @@ import cl.duoc.ms_cita.Service.CitaService;
 import cl.duoc.ms_cita.assamblers.CitaModelAssembler;
 import cl.duoc.ms_cita.dto.CitaDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
  
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -37,6 +39,11 @@ public class CitaController {
  
     @PostMapping
     @Operation(summary = "Crear cita")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Cita creada exitosamente"),
+        @ApiResponse(responseCode = "400", description = "Mascota o personal no existe"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<EntityModel<CitaDTO>> crearCita(@RequestBody CitaDTO citaDto) {
         logger.info("POST /api/v1/cita - Solicitud recibida");
         Cita nueva = citaService.guardar(citaDto.toModel());
@@ -46,6 +53,10 @@ public class CitaController {
  
     @GetMapping
     @Operation(summary = "Listar citas")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista de citas retornada exitosamente"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<CollectionModel<EntityModel<CitaDTO>>> listarCitas() {
         logger.info("GET /api/v1/cita - Solicitud recibida");
         List<EntityModel<CitaDTO>> citas = citaService.listar().stream()
@@ -58,6 +69,10 @@ public class CitaController {
  
     @GetMapping("/{id}/exists")
     @Operation(summary = "Verificar si existe cita")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Verificación exitosa"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<Boolean> existeCita(@PathVariable Long id) {
         logger.info("GET /api/v1/cita/{}/exists - Solicitud recibida", id);
         return ResponseEntity.ok(citaService.existePorId(id));
@@ -65,6 +80,11 @@ public class CitaController {
  
     @GetMapping("/{id}")
     @Operation(summary = "Obtener cita por ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Cita encontrada"),
+        @ApiResponse(responseCode = "404", description = "Cita no encontrada"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<EntityModel<CitaDTO>> buscarPorId(@PathVariable Long id) {
         logger.info("GET /api/v1/cita/{} - Solicitud recibida", id);
         return citaService.findById(id)
@@ -76,6 +96,12 @@ public class CitaController {
  
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar cita")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Cita actualizada exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Cita no encontrada"),
+        @ApiResponse(responseCode = "400", description = "Mascota o personal no existe"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<EntityModel<CitaDTO>> actualizar(@PathVariable Long id, @RequestBody CitaDTO dto) {
         logger.info("PUT /api/v1/cita/{} - Solicitud recibida", id);
         Cita actualizada = citaService.actualizar(id, dto.toModel());
@@ -85,6 +111,11 @@ public class CitaController {
  
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar cita")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Cita eliminada exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Cita no encontrada"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<EntityModel<Void>> eliminar(@PathVariable Long id) {
         logger.info("DELETE /api/v1/cita/{} - Solicitud recibida", id);
         citaService.eliminar(id);
@@ -93,6 +124,5 @@ public class CitaController {
         logger.info("Cita eliminada id={}", id);
         return ResponseEntity.ok(model);
     }
-    
-
 }
+ 

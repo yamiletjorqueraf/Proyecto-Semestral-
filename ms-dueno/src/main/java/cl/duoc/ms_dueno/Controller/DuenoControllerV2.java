@@ -1,5 +1,5 @@
 package cl.duoc.ms_dueno.Controller;
-
+ 
 import java.util.List;
 import java.util.stream.Collectors;
  
@@ -14,6 +14,8 @@ import cl.duoc.ms_dueno.Service.DuenoService;
 import cl.duoc.ms_dueno.assamblers.DuenoModelAssembler;
 import cl.duoc.ms_dueno.dto.DuenoDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
  
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -35,6 +37,10 @@ public class DuenoControllerV2 {
  
     @GetMapping
     @Operation(summary = "Listar dueños V2")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista retornada exitosamente"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public CollectionModel<EntityModel<DuenoDTO>> listarDuenos() {
         logger.info("V2 GET /api/v2/dueno - Listando dueños");
         List<EntityModel<DuenoDTO>> duenos = duenoService.listar().stream()
@@ -45,6 +51,11 @@ public class DuenoControllerV2 {
  
     @GetMapping("/{id}")
     @Operation(summary = "Obtener dueño por ID V2")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Dueño encontrado"),
+        @ApiResponse(responseCode = "404", description = "Dueño no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public EntityModel<DuenoDTO> obtenerDueno(@PathVariable Long id) {
         logger.info("V2 GET /api/v2/dueno/{} - Obteniendo dueño", id);
         Dueno dueno = duenoService.findById(id)

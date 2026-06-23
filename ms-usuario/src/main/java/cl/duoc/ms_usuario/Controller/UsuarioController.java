@@ -1,5 +1,5 @@
 package cl.duoc.ms_usuario.Controller;
-
+ 
 import java.util.List;
 import java.util.stream.Collectors;
  
@@ -10,13 +10,14 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+ 
 import cl.duoc.ms_usuario.Assamblers.UsuarioModelAssembler;
 import cl.duoc.ms_usuario.Model.Usuario;
 import cl.duoc.ms_usuario.Service.UsuarioService;
-
 import cl.duoc.ms_usuario.dto.UsuarioDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
  
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -38,6 +39,11 @@ public class UsuarioController {
  
     @PostMapping
     @Operation(summary = "Crear usuario", description = "Registra un nuevo usuario")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Usuario creado exitosamente"),
+        @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<EntityModel<UsuarioDTO>> crearUsuario(@RequestBody UsuarioDTO usuarioDto) {
         logger.info("POST /api/v1/usuario - Solicitud recibida");
         Usuario nuevo = usuarioService.guardar(usuarioDto.toModel());
@@ -47,6 +53,10 @@ public class UsuarioController {
  
     @GetMapping
     @Operation(summary = "Listar usuarios", description = "Retorna todos los usuarios")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista de usuarios retornada exitosamente"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<CollectionModel<EntityModel<UsuarioDTO>>> listarUsuarios() {
         logger.info("GET /api/v1/usuario - Solicitud recibida");
         List<EntityModel<UsuarioDTO>> usuarios = usuarioService.listar().stream()
@@ -60,6 +70,10 @@ public class UsuarioController {
  
     @GetMapping("/{id}/exists")
     @Operation(summary = "Verificar si existe un usuario")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Verificación exitosa"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<Boolean> existeUsuario(@PathVariable Long id) {
         logger.info("GET /api/v1/usuario/{}/exists - Solicitud recibida", id);
         return ResponseEntity.ok(usuarioService.existePorId(id));
@@ -67,6 +81,11 @@ public class UsuarioController {
  
     @GetMapping("/{id}")
     @Operation(summary = "Obtener usuario por ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Usuario encontrado"),
+        @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<EntityModel<UsuarioDTO>> buscarPorId(@PathVariable Long id) {
         logger.info("GET /api/v1/usuario/{} - Solicitud recibida", id);
         return usuarioService.findById(id)
@@ -82,6 +101,12 @@ public class UsuarioController {
  
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar usuario")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Usuario actualizado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
+        @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<EntityModel<UsuarioDTO>> actualizar(@PathVariable Long id, @RequestBody UsuarioDTO dto) {
         logger.info("PUT /api/v1/usuario/{} - Solicitud recibida", id);
         Usuario actualizado = usuarioService.actualizar(id, dto.toModel());
@@ -91,6 +116,11 @@ public class UsuarioController {
  
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar usuario")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Usuario eliminado exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<EntityModel<Void>> eliminar(@PathVariable Long id) {
         logger.info("DELETE /api/v1/usuario/{} - Solicitud recibida", id);
         usuarioService.eliminar(id);
@@ -99,5 +129,4 @@ public class UsuarioController {
         logger.info("Usuario eliminado id={}", id);
         return ResponseEntity.ok(model);
     }
-
 }
