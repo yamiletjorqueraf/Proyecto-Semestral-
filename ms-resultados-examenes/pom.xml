@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>ms-farmacia</artifactId>
+	<artifactId>ms-resultados-examenes</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ms-farmacia</name>
-	<description>Microservicio de gestion de medicamentos del sistema de veterinaria</description>
+	<name>ms-resultado-examenes</name>
+	<description>Microservicio de gestion de los resultados de examenes del sistema de veterinaria</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -40,15 +40,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc</artifactId>
 		</dependency>
-		<!-- Quita el comentario solo si este microservicio necesita
-		     un stack reactivo (WebClient reactivo, streams, etc).
-		     Tenerlo junto con webmvc sin necesitarlo puede causar
-		     que Spring arranque con el servidor equivocado.
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
-		</dependency>
-		-->
+
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
