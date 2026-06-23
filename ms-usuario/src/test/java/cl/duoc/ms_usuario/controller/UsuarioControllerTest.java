@@ -7,11 +7,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-import cl.duoc.ms_usuario.Assamblers.UsuarioModelAssembler;
-import cl.duoc.ms_usuario.Controller.UsuarioController;
-import cl.duoc.ms_usuario.Model.Usuario;
-import cl.duoc.ms_usuario.Service.UsuarioService;
-
+import cl.duoc.ms_usuario.controller.UsuarioController;
+import cl.duoc.ms_usuario.model.Usuario;
+import cl.duoc.ms_usuario.service.UsuarioService;
+import cl.duoc.ms_usuario.assamblers.UsuarioModelAssembler;
 import cl.duoc.ms_usuario.dto.UsuarioDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

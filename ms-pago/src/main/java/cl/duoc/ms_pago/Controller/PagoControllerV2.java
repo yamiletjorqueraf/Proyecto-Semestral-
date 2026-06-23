@@ -1,4 +1,4 @@
-package cl.duoc.ms_pago.Controller;
+package cl.duoc.ms_pago.controller;
  
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,9 +10,9 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
  
 import cl.duoc.ms_pago.dto.PagoDTO;
-import cl.duoc.ms_pago.Model.Pago;
+import cl.duoc.ms_pago.model.Pago;
 import cl.duoc.ms_pago.assamblers.PagoModelAssembler;
-import cl.duoc.ms_pago.Service.PagoService;
+import cl.duoc.ms_pago.service.PagoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

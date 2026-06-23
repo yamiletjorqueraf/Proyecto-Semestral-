@@ -1,8 +1,8 @@
 package cl.duoc.ms_usuario.service;
 
-import cl.duoc.ms_usuario.Model.Usuario;
-import cl.duoc.ms_usuario.Repository.UsuarioRepository;
-import cl.duoc.ms_usuario.Service.UsuarioService;
+import cl.duoc.ms_usuario.model.Usuario;
+import cl.duoc.ms_usuario.repository.UsuarioRepository;
+import cl.duoc.ms_usuario.service.UsuarioService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

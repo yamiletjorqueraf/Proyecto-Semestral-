@@ -1,7 +1,7 @@
 package cl.duoc.ms_cita.assamblers;
 
-import cl.duoc.ms_cita.Controller.CitaController;
-import cl.duoc.ms_cita.Model.Cita;
+import cl.duoc.ms_cita.controller.CitaController;
+import cl.duoc.ms_cita.model.Cita;
 import cl.duoc.ms_cita.dto.CitaDTO;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;

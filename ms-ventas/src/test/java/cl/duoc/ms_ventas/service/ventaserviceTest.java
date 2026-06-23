@@ -6,7 +6,7 @@ import cl.duoc.ms_ventas.exception.BadRequestException;
 import cl.duoc.ms_ventas.exception.ResourceNotFoundException;
 import cl.duoc.ms_ventas.model.Venta;
 import cl.duoc.ms_ventas.repository.VentaRepository;
-import cl.duoc.ms_ventas.service.VentaService;
+
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
  
 @ExtendWith(MockitoExtension.class)
-public class ventaserviceTest {
+public class VentaServiceTest {
      @Mock
     private VentaRepository ventaRepository;
  

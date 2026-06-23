@@ -1,4 +1,4 @@
-package cl.duoc.ms_dueno.Controller;
+package cl.duoc.ms_dueno.controller;
  
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,8 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
  
-import cl.duoc.ms_dueno.Model.Dueno;
-import cl.duoc.ms_dueno.Service.DuenoService;
+import cl.duoc.ms_dueno.model.Dueno;
+import cl.duoc.ms_dueno.service.DuenoService;
 import cl.duoc.ms_dueno.assamblers.DuenoModelAssembler;
 import cl.duoc.ms_dueno.dto.DuenoDTO;
 import io.swagger.v3.oas.annotations.Operation;

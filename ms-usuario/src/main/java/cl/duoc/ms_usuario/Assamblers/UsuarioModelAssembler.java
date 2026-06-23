@@ -1,6 +1,6 @@
-package cl.duoc.ms_usuario.Assamblers;
-import cl.duoc.ms_usuario.Controller.UsuarioController;
-import cl.duoc.ms_usuario.Model.Usuario;
+package cl.duoc.ms_usuario.assamblers;
+import cl.duoc.ms_usuario.controller.UsuarioController;
+import cl.duoc.ms_usuario.model.Usuario;
 import cl.duoc.ms_usuario.dto.UsuarioDTO;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
