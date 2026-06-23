@@ -1,32 +1,40 @@
 package cl.duoc.ms_hospitalizacion.dto;
 
-import java.time.LocalDate;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import cl.duoc.ms_hospitalizacion.model.Hospitalizacion;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.LocalDate;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class HospitalizacionDTO {
-
     private Long idHospitalizacion;
-
-    @NotNull(message = "El id de la mascota no debe estar en blanco")
     private Long idMascota;
-    
-    @NotNull(message = "El id del dueño no debe estar en blanco")
     private Long idDueno;
-
-    @NotNull(message = "Debe ingresar la fecha de inicio de la hospitalización")
     private LocalDate fecha_inicio;
-    
-    @NotNull(message = "Debe ingresar la fecha de termino de la hospitalización")
     private LocalDate fecha_alta;
+    private String diagnostico; // Ejemplo: "En observación", "Alta"
 
-    @NotBlank(message = "Debe ingresar un diagnostico")
-    private String diagnostico;
+    public static HospitalizacionDTO fromModel(Hospitalizacion hospitalizacion) {
+        return new HospitalizacionDTO(
+            hospitalizacion.getIdHospitalizacion(),
+            hospitalizacion.getIdMascota(),
+            hospitalizacion.getIdDueno(),
+            hospitalizacion.getFecha_inicio(),
+            hospitalizacion.getFecha_alta(),
+            hospitalizacion.getDiagnostico());
+    }
+
+    public Hospitalizacion toModel() {
+        return new Hospitalizacion(
+            idHospitalizacion,
+            idMascota,
+            idDueno,
+            fecha_inicio,
+            fecha_alta,
+            diagnostico
+        );
+    }
 }
