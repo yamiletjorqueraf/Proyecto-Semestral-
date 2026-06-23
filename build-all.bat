@@ -27,6 +27,15 @@ call .\mvnw clean package -DskipTests
 cd ../ms-pago
 call .\mvnw clean package -DskipTests
 
+cd ../ms-farmacia
+call .\mvnw clean package -DskipTests
+
+cd ../ms-hospitalizacion
+call .\mvnw clean package -DskipTests
+
+cd ../ms-resultados-examenes
+call .\mvnw clean package -DskipTests
+
 rem Volver a la raiz y levantar Docker
 cd ..
 docker-compose up --build
