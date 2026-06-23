@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.List;
  
 @ExtendWith(MockitoExtension.class)
-public class VentaControllerTest {
+public class ventacontrollerTest {
 
     private MockMvc mockMvc;
  
