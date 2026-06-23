@@ -1,91 +1,187 @@
-x-common-env: &common-env
-  SECRET: "esta_es_mi_compleja_clave_secreta"
-
+version: '3.8'
+ 
 services:
-
-  api-gateway:
-    build: ./api-gateway
-    ports:
-      - "9090:9090"
+ 
+  # ─── BASE DE DATOS ────────────────────────────────────────────
+  mysql:
+    image: mysql:8
+    container_name: mysql-veterinaria
+    restart: always
     environment:
-      <<: *common-env
-    depends_on:      
-      - ms-usuario
-      - ms-dueno
-      - ms-mascota
-      - ms-personal
-      - ms-cita
-      - ms-hospitalizacion
-      - ms-resultados-examenes
-      - ms-farmacia
-      - ms-ventas
-      - ms-pago
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - veterinaria-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+       # ─── MICROSERVICIOS ───────────────────────────────────────────
   ms-usuario:
     build: ./ms-usuario
+    container_name: ms-usuario
+    restart: on-failure
     ports:
       - "8091:8091"
     environment:
-      <<: *common-env
-
-  ms-dueno:
-    build: ./ms-dueno
-    ports:
-      - "8082:8082"
-    environment:
-      <<: *common-env
-
-  ms-mascota:
-    build: ./ms-mascota
-    ports:
-      - "8083:8083"
-    environment:
-      <<: *common-env
-
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_usuarios?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - veterinaria-net
+ 
   ms-personal:
     build: ./ms-personal
-    ports:
-      - "8084:8084"
-    environment:
-      <<: *common-env
-
-  ms-cita:
-    build: ./ms-cita
+    container_name: ms-personal
+    restart: on-failure
     ports:
       - "8085:8085"
     environment:
-      <<: *common-env
-    
-  ms-hospitalizacion:
-    build: ./ms-hospitalizacion
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_personal?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - veterinaria-net
+ 
+  ms-dueno:
+    build: ./ms-dueno
+    container_name: ms-dueno
+    restart: on-failure
     ports:
-      - "8086:8086"
+      - "8082:8082"
     environment:
-      <<: *common-env
-
-  ms-resultados-examenes:
-    build: ./ms-resultados-examenes
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_duenos?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      MS_USUARIO_URL: http://ms-usuario:8091
+      MS_MASCOTA_URL: http://ms-mascota:8083 
+    depends_on:
+      mysql:
+        condition: service_healthy
+      ms-usuario:
+        condition: service_started
+    networks:
+      - veterinaria-net
+ 
+  ms-mascota:
+    build: ./ms-mascota
+    container_name: ms-mascota
+    restart: on-failure
     ports:
-      - "8087:8087"
+      - "8083:8083"
     environment:
-      <<: *common-env
-
-  ms-farmacia:
-    build: ./ms-farmacia
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_mascotas?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      MS_DUENO_URL: http://ms-dueno:8082
+    depends_on:
+      mysql:
+        condition: service_healthy
+      ms-dueno:
+        condition: service_started
+    networks:
+      - veterinaria-net
+ 
+  ms-cita:
+    build: ./ms-cita
+    container_name: ms-cita
+    restart: on-failure
     ports:
-      - "8088:8088"
+      - "8084:8084"
     environment:
-      <<: *common-env
-
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_citas?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      MS_MASCOTA_URL: http://ms-mascota:8083
+      MS_PERSONAL_URL: http://ms-personal:8085
+    depends_on:
+      mysql:
+        condition: service_healthy
+      ms-mascota:
+        condition: service_started
+      ms-personal:
+        condition: service_started
+    networks:
+      - veterinaria-net
+ 
   ms-ventas:
     build: ./ms-ventas
+    container_name: ms-ventas
+    restart: on-failure
     ports:
       - "8089:8089"
     environment:
-      <<: *common-env
-
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_ventas?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      API_DUENO_URL: http://ms-dueno:8082
+      API_MASCOTA_URL: http://ms-mascota:8083
+    depends_on:
+      mysql:
+        condition: service_healthy
+      ms-dueno:
+        condition: service_started
+      ms-mascota:
+        condition: service_started
+    networks:
+      - veterinaria-net
+ 
   ms-pago:
     build: ./ms-pago
+    container_name: ms-pago
+    restart: on-failure
     ports:
       - "8090:8090"
     environment:
-      <<: *common-env
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_pago?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      API_VENTA_URL: http://ms-ventas:8089
+      API_DUENO_URL: http://ms-dueno:8082
+    depends_on:
+      mysql:
+        condition: service_healthy
+      ms-ventas:
+        condition: service_started
+      ms-dueno:
+        condition: service_started
+    networks:
+      - veterinaria-net
+
+    # ─── API GATEWAY ──────────────────────────────────────────────
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    depends_on:
+      - ms-usuario
+      - ms-personal
+      - ms-dueno
+      - ms-mascota
+      - ms-cita
+      - ms-ventas
+      - ms-pago
+    
+    networks:
+      - veterinaria-net
+      # ─── VOLÚMENES Y REDES ────────────────────────────────────────
+volumes:
+  mysql_data:
+ 
+networks:
+  veterinaria-net:
+    driver: bridge
+ 
