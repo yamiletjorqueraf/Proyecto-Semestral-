@@ -4,5 +4,5 @@ CREATE TABLE personal (
     apellido VARCHAR(255) NOT NULL,
     cargo VARCHAR(255) NOT NULL,
     correo VARCHAR(255) NOT NULL,
-    activo boolean(1) DEFAULT 1
+    activo TINYINT(1) DEFAULT 1
 );
