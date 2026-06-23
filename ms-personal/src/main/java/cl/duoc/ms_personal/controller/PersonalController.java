@@ -3,86 +3,97 @@ package cl.duoc.ms_personal.controller;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+ 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
+ 
+import cl.duoc.ms_personal.assamblers.PersonalModelAssembler;
 import cl.duoc.ms_personal.dto.PersonalDTO;
 import cl.duoc.ms_personal.model.Personal;
 import cl.duoc.ms_personal.service.PersonalService;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+ 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+ 
 @RestController
 @RequestMapping("/api/v1/personal")
+@Tag(name = "Personal", description = "Operaciones del microservicio de personal")
 public class PersonalController {
-
+ 
     private static final Logger logger = LoggerFactory.getLogger(PersonalController.class);
-
-private final PersonalService personalService;
-
-    public PersonalController(PersonalService personalService) {
+ 
+    private final PersonalService personalService;
+    private final PersonalModelAssembler assembler;
+ 
+    public PersonalController(PersonalService personalService, PersonalModelAssembler assembler) {
         this.personalService = personalService;
+        this.assembler = assembler;
     }
-
+ 
     @PostMapping
-    public ResponseEntity<PersonalDTO> crearPersonal(@RequestBody PersonalDTO dto) {
+    @Operation(summary = "Crear personal")
+    public ResponseEntity<EntityModel<PersonalDTO>> crearPersonal(@RequestBody PersonalDTO dto) {
         logger.info("POST /api/v1/personal - Solicitud recibida");
         Personal nuevo = personalService.guardar(dto.toModel());
         logger.info("Personal creado con id={}", nuevo.getIdPersonal());
-        return ResponseEntity.status(HttpStatus.CREATED).body(PersonalDTO.fromModel(nuevo));
+        return ResponseEntity.status(HttpStatus.CREATED).body(assembler.toModel(nuevo));
     }
-
+ 
     @GetMapping
-    public ResponseEntity<List<PersonalDTO>> listarPersonal() {
+    @Operation(summary = "Listar personal")
+    public ResponseEntity<CollectionModel<EntityModel<PersonalDTO>>> listarPersonal() {
         logger.info("GET /api/v1/personal - Solicitud recibida");
-        List<Personal> lista = personalService.listar();
-        List<PersonalDTO> dtos = lista.stream().map(PersonalDTO::fromModel).collect(Collectors.toList());
-        logger.info("Total personal retornado: {}", dtos.size());
-        return ResponseEntity.ok(dtos);
+        List<EntityModel<PersonalDTO>> lista = personalService.listar().stream()
+                .map(assembler::toModel).collect(Collectors.toList());
+        CollectionModel<EntityModel<PersonalDTO>> collection = CollectionModel.of(lista,
+                linkTo(methodOn(PersonalController.class).listarPersonal()).withSelfRel());
+        logger.info("Total personal retornado: {}", lista.size());
+        return ResponseEntity.ok(collection);
     }
-
+ 
     @GetMapping("/{id}/exists")
+    @Operation(summary = "Verificar si existe personal")
     public ResponseEntity<Boolean> existePersonal(@PathVariable Long id) {
         logger.info("GET /api/v1/personal/{}/exists - Solicitud recibida", id);
         return ResponseEntity.ok(personalService.existePorId(id));
     }
-
+ 
     @GetMapping("/{id}")
-    public ResponseEntity<PersonalDTO> buscarPorId(@PathVariable Long id) {
+    @Operation(summary = "Obtener personal por ID")
+    public ResponseEntity<EntityModel<PersonalDTO>> buscarPorId(@PathVariable Long id) {
         logger.info("GET /api/v1/personal/{} - Solicitud recibida", id);
         Optional<Personal> personal = personalService.findById(id);
         if (personal.isPresent()) {
             logger.info("Personal retornado id={}", id);
-            return ResponseEntity.ok(PersonalDTO.fromModel(personal.get()));
+            return ResponseEntity.ok(assembler.toModel(personal.get()));
         }
         logger.warn("Personal no encontrado id={}", id);
         return ResponseEntity.notFound().build();
     }
-
-    
-
+ 
     @PutMapping("/{id}")
-    public ResponseEntity<PersonalDTO> actualizar(@PathVariable Long id, @RequestBody PersonalDTO dto) {
+    @Operation(summary = "Actualizar personal")
+    public ResponseEntity<EntityModel<PersonalDTO>> actualizar(@PathVariable Long id, @RequestBody PersonalDTO dto) {
         logger.info("PUT /api/v1/personal/{} - Solicitud recibida", id);
         Personal actualizado = personalService.actualizar(id, dto.toModel());
         logger.info("Personal actualizado id={}", id);
-        return ResponseEntity.ok(PersonalDTO.fromModel(actualizado));
+        return ResponseEntity.ok(assembler.toModel(actualizado));
     }
-
+ 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    @Operation(summary = "Eliminar personal")
+    public ResponseEntity<EntityModel<Void>> eliminar(@PathVariable Long id) {
         logger.info("DELETE /api/v1/personal/{} - Solicitud recibida", id);
         personalService.eliminar(id);
+        EntityModel<Void> model = EntityModel.of(null,
+                linkTo(methodOn(PersonalController.class).listarPersonal()).withRel("todo-el-personal"));
         logger.info("Personal eliminado id={}", id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(model);
     }
 }
