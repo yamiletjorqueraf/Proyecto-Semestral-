@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>cita-service</artifactId>
+	<artifactId>ms-cita</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>cita-service</name>
+	<name>ms-cita</name>
 	<description>Microservicio de gestion de citas del sistema de veterinaria</description>
 	<url/>
 	<licenses>
