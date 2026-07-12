@@ -58,13 +58,29 @@ class ResultadoExamenServiceTest {
     }
 
     @Test
-    void cuandoEliminarIdInexistente_entoncesLanzaException() {
+    void cuandoBuscarPorIdInexistente_entoncesRetornaOptionalVacio() {
+        when(resultadoExamenRepository.findById(99L)).thenReturn(Optional.empty());
+
+        Optional<ResultadoExamen> resultado = resultadoExamenService.findById(99L);
+
+        assertFalse(resultado.isPresent());
+    }
+
+    @Test
+    void cuandoEliminarIdExistente_entoncesEliminaCorrectamente() {
+        when(resultadoExamenRepository.existsById(1L)).thenReturn(true);
+        doNothing().when(resultadoExamenRepository).deleteById(1L);
+
+        assertDoesNotThrow(() -> resultadoExamenService.eliminar(1L));
+        verify(resultadoExamenRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void cuandoEliminarIdInexistente_entoncesLanzaResourceNotFoundException() {
+        // CORREGIDO: Garantizar la validación de excepciones personalizadas de negocio
         when(resultadoExamenRepository.existsById(99L)).thenReturn(false);
 
-        assertThrows(ResourceNotFoundException.class, () -> {
-            resultadoExamenService.eliminar(99L);
-        });
-
+        assertThrows(ResourceNotFoundException.class, () -> resultadoExamenService.eliminar(99L));
         verify(resultadoExamenRepository, never()).deleteById(anyLong());
     }
 }
