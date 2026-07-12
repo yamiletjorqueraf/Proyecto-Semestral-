@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import cl.duoc.ms_farmacia.dto.MedicamentoDTO;
 import cl.duoc.ms_farmacia.model.Medicamento;
 import cl.duoc.ms_farmacia.repository.MedicamentoRepository;
+import cl.duoc.ms_farmacia.exception.BadRequestException;
 import cl.duoc.ms_farmacia.exception.ResourceNotFoundException; 
 @Service
 public class MedicamentoService {
@@ -17,7 +18,18 @@ public class MedicamentoService {
     private MedicamentoRepository medicamentoRepository;
 
   
-    public Medicamento guardar(MedicamentoDTO dto) {
+     public Medicamento guardar(MedicamentoDTO dto) {
+        // Regla de Negocio / Integridad: Validaciones manuales críticas en el servicio
+        if (dto.getNombre() == null || dto.getNombre().trim().isEmpty()) {
+            throw new BadRequestException("El nombre del medicamento no debe estar en blanco o vacío");
+        }
+        if (dto.getPrecio() == null || dto.getPrecio() < 0) {
+            throw new BadRequestException("El precio debe ser un valor positivo");
+        }
+        if (dto.getStock() == null || dto.getStock() < 0) {
+            throw new BadRequestException("El stock no puede ser un número negativo");
+        }
+
         Medicamento m = new Medicamento();
         m.setNombre(dto.getNombre());
         m.setDescripcion(dto.getDescripcion()); 
@@ -26,7 +38,6 @@ public class MedicamentoService {
         return medicamentoRepository.save(m);
     }
 
-    
     public List<Medicamento> listar() {
         return medicamentoRepository.findAll();
     }
@@ -37,7 +48,18 @@ public class MedicamentoService {
     }
 
     
-    public Medicamento actualizar(Long id, Medicamento datosNuevos) {
+     public Medicamento actualizar(Long id, Medicamento datosNuevos) {
+        // Regla de Negocio / Integridad en actualizaciones
+        if (datosNuevos.getNombre() == null || datosNuevos.getNombre().trim().isEmpty()) {
+            throw new BadRequestException("El nombre a actualizar no puede estar vacío");
+        }
+        if (datosNuevos.getPrecio() == null || datosNuevos.getPrecio() < 0) {
+            throw new BadRequestException("El precio a actualizar debe ser positivo");
+        }
+        if (datosNuevos.getStock() == null || datosNuevos.getStock() < 0) {
+            throw new BadRequestException("El stock a actualizar no puede ser negativo");
+        }
+
         return medicamentoRepository.findById(id)
                 .map(m -> {
                     m.setNombre(datosNuevos.getNombre());
@@ -46,12 +68,12 @@ public class MedicamentoService {
                     m.setStock(datosNuevos.getStock());
                     return medicamentoRepository.save(m); 
                 })
-                .orElseThrow(() -> new ResourceNotFoundException("Medicamento no encontrado con ID: " + id));
+        
+    .orElseThrow(() -> new ResourceNotFoundException("Medicamento no encontrado con ID: " + id));
     }
 
     
-    public void eliminar(Long id) {
-        
+   public void eliminar(Long id) {
         if (!medicamentoRepository.existsById(id)) {
             throw new ResourceNotFoundException("No se puede eliminar, ID inexistente: " + id);
         }
@@ -63,3 +85,4 @@ public class MedicamentoService {
         return medicamentoRepository.existsById(id);
     }
 }
+
