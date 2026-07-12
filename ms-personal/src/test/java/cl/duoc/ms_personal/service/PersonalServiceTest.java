@@ -1,5 +1,6 @@
 package cl.duoc.ms_personal.service;
 
+import cl.duoc.ms_personal.exception.ResourceNotFoundException;
 import cl.duoc.ms_personal.model.Personal;
 import cl.duoc.ms_personal.repository.PersonalRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -79,13 +80,25 @@ public class PersonalServiceTest {
     @Test
     void testActualizarNoEncontrado() {
         when(personalRepository.findById(99L)).thenReturn(Optional.empty());
-        assertThrows(RuntimeException.class, () -> personalService.actualizar(99L, personal));
+        // CORREGIDO: Cambiar RuntimeException por ResourceNotFoundException
+        assertThrows(ResourceNotFoundException.class, () -> personalService.actualizar(99L, personal));
     }
  
     @Test
-    void testEliminar() {
+    void testEliminarExitoso() {
+        when(personalRepository.existsById(1L)).thenReturn(true);
         doNothing().when(personalRepository).deleteById(1L);
+        
         assertDoesNotThrow(() -> personalService.eliminar(1L));
         verify(personalRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void testEliminarNoEncontradoLanzaException() {
+        when(personalRepository.existsById(99L)).thenReturn(false);
+        
+        // CORREGIDO: Verificar que la regla de negocio impida el borrado si no existe
+        assertThrows(ResourceNotFoundException.class, () -> personalService.eliminar(99L));
+        verify(personalRepository, never()).deleteById(anyLong());
     }
 }

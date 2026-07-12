@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import cl.duoc.ms_personal.exception.ResourceNotFoundException;
 import cl.duoc.ms_personal.model.Personal;
 import cl.duoc.ms_personal.repository.PersonalRepository;
 
@@ -37,10 +38,12 @@ public class PersonalService {
 
     public Personal actualizar(Long id, Personal datosNuevos) {
         logger.info("Actualizando personal id={}", id);
+        
+        // CORREGIDO: Lanzar ResourceNotFoundException específica en lugar de RuntimeException genérico
         Personal existente = personalRepository.findById(id)
             .orElseThrow(() -> {
-                logger.warn("Personal no encontrado para actualizar id={}", id);
-                return new RuntimeException("Miembro del personal no encontrado");
+                logger.warn("Miembro del personal no encontrado para actualizar id={}", id);
+                return new ResourceNotFoundException("Miembro del personal no encontrado con el ID: " + id);
             });
         
         existente.setNombre(datosNuevos.getNombre());
@@ -48,6 +51,7 @@ public class PersonalService {
         existente.setCargo(datosNuevos.getCargo());
         existente.setCorreo(datosNuevos.getCorreo());
         existente.setActivo(datosNuevos.isActivo());
+        
         Personal actualizado = personalRepository.save(existente);
         logger.info("Personal actualizado exitosamente id={}", actualizado.getIdPersonal());
         return actualizado;
@@ -55,27 +59,24 @@ public class PersonalService {
      
     public Optional<Personal> findById(Long id) {
         logger.info("Buscando personal por id={}", id);
-        Optional<Personal> personal = personalRepository.findById(id);
-        if (personal.isPresent()) {
-            logger.info("Personal encontrado id={}", id);
-        } else {
-            logger.warn("Personal no encontrado id={}", id);
-        }
-        return personal;
+        return personalRepository.findById(id);
     }
 
     public boolean existePorId(Long id) {
         logger.info("Verificando existencia de personal id={}", id);
-        boolean existe = personalRepository.existsById(id);
-        logger.info("Personal id={} existe={}", id, existe);
-        return existe;
+        return personalRepository.existsById(id);
     }
 
     public void eliminar(Long id) {
         logger.info("Eliminando personal id={}", id);
+        
+        // MEJORA: Regla de negocio que valida existencia antes de borrar
+        if (!personalRepository.existsById(id)) {
+            logger.warn("No se puede eliminar: Miembro del personal no encontrado id={}", id);
+            throw new ResourceNotFoundException("No se puede eliminar: Personal no encontrado con el ID: " + id);
+        }
+        
         personalRepository.deleteById(id);
         logger.info("Personal eliminado exitosamente id={}", id);
     }
-
- 
 }

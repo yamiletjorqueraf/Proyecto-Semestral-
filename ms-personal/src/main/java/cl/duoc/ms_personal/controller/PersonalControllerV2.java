@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
  
 import cl.duoc.ms_personal.assamblers.PersonalModelAssembler;
 import cl.duoc.ms_personal.dto.PersonalDTO;
+import cl.duoc.ms_personal.exception.ResourceNotFoundException;
 import cl.duoc.ms_personal.model.Personal;
 import cl.duoc.ms_personal.service.PersonalService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,17 +50,13 @@ public class PersonalControllerV2 {
                 linkTo(methodOn(PersonalControllerV2.class).listarPersonal()).withSelfRel());
     }
  
-    @GetMapping("/{id}")
-    @Operation(summary = "Obtener personal por ID V2")
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Personal encontrado"),
-        @ApiResponse(responseCode = "404", description = "Personal no encontrado"),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor")
-    })
-    public EntityModel<PersonalDTO> obtenerPersonal(@PathVariable Long id) {
-        logger.info("V2 GET /api/v2/personal/{} - Obteniendo personal", id);
-        Personal personal = personalService.findById(id)
-                .orElseThrow(() -> new RuntimeException("Personal no encontrado"));
-        return assembler.toModel(personal);
-    }
+
+@GetMapping("/{id}")
+@Operation(summary = "Obtener personal por ID V2")
+public EntityModel<PersonalDTO> obtenerPersonal(@PathVariable Long id) {
+    logger.info("V2 GET /api/v2/personal/{} - Obteniendo personal", id);
+    Personal personal = personalService.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Miembro del personal no encontrado con el ID: " + id));
+    return assembler.toModel(personal);
+}
 }
