@@ -1,8 +1,8 @@
 spring:
   application:
-    name: ms-usuario
+    name: ms-resultados-examenes
   datasource:
-    url: jdbc:mysql://localhost:3306/db_usuarios?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://host.docker.internal:3306/db_resultados_examenes?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: 
     driver-class-name: com.mysql.cj.jdbc.Driver

@@ -2,7 +2,7 @@ spring:
   application:
     name: ms-pago
   datasource:
-    url: jdbc:mysql://localhost:3306/db_pago?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://host.docker.internal:3306/db_pago?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: 
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -23,9 +23,9 @@ server:
  
 api:
   venta:
-    url: http://localhost:8089
+    url: http://host.docker.internal:8089
   dueno:
-    url: http://localhost:8082
+    url: http://host.docker.internal:8082
  
 springdoc:
   api-docs:
