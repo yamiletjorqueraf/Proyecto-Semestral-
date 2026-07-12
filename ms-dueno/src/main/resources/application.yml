@@ -2,7 +2,7 @@ spring:
   application:
     name: ms-dueno
   datasource:
-    url: jdbc:mysql://localhost:3306/db_duenos?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://host.docker.internal:3306/db_duenos?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: 
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -23,7 +23,7 @@ server:
  
 ms:
   usuario:
-    url: http://localhost:8091   # corregido de 8081 a 8091
+    url: http://host.docker.internal:8091 
  
 springdoc:
   api-docs:

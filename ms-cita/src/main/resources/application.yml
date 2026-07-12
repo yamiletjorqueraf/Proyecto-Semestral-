@@ -2,7 +2,7 @@ spring:
   application:
     name: ms-cita
   datasource:
-    url: jdbc:mysql://localhost:3306/db_citas?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://host.docker.internal:3306/db_citas?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: root
     password: 
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -23,9 +23,9 @@ server:
  
 ms:
   mascota:
-    url: http://localhost:8083
+    url: http://host.docker.internal:8083
   personal:
-    url: http://localhost:8085
+    url: http://host.docker.internal:8085
  
 springdoc:
   api-docs:
