@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 
 import cl.duoc.ms_mascota.client.DuenoClient;
+import cl.duoc.ms_mascota.exception.BadRequestException;
 import cl.duoc.ms_mascota.model.Mascota;
 import cl.duoc.ms_mascota.repository.MascotaRepository;
 
@@ -37,7 +38,7 @@ public class MascotaService {
         logger.info("Validando existencia de dueño id={}", mascota.getIdDueno());
         if (!Boolean.TRUE.equals(duenoClient.existeDueno(mascota.getIdDueno()))) {
             logger.warn("Dueño no existe id={}", mascota.getIdDueno());
-            throw new RuntimeException("No se puede registrar mascota: El Dueño con ID " + mascota.getIdDueno() + " no existe.");
+            throw new BadRequestException("El dueño con ID " + mascota.getIdDueno() + " no existe.");
         }
         Mascota guardada = mascotaRepository.save(mascota);
         logger.info("Mascota guardada exitosamente con id={}", guardada.getIdMascota());
@@ -50,14 +51,14 @@ public class MascotaService {
         Mascota existente = mascotaRepository.findById(id)
             .orElseThrow(() -> { 
                 logger.warn("Mascota no encontrda para actualizar id={}", id);
-                return new RuntimeException("Mascota no encontrada");
+                return new BadRequestException("Mascota no encontrada");
             });
 
         logger.info("Validando existencia de dueño id={}", datosNuevos.getIdDueno());
         if (!Boolean.TRUE.equals(duenoClient.existeDueno(datosNuevos.getIdDueno()))) {
             logger.warn("Dueño no encontrado para actualizar mascota idDueno={}", datosNuevos.getIdDueno());
-            throw new RuntimeException("Dueño no encontrado para actualizar mascota");
-    }
+            throw new BadRequestException("El dueño con ID " + datosNuevos.getIdDueno() + " no existe.");
+        }
 
     existente.setNombre(datosNuevos.getNombre());
     existente.setEspecie(datosNuevos.getEspecie());
