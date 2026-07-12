@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import cl.duoc.ms_hospitalizacion.dto.HospitalizacionDTO;
 import cl.duoc.ms_hospitalizacion.model.Hospitalizacion;
 import cl.duoc.ms_hospitalizacion.repository.HospitalizacionRepository;
+import cl.duoc.ms_hospitalizacion.exception.BadRequestException;
 import cl.duoc.ms_hospitalizacion.exception.ResourceNotFoundException;
 
 @Service
@@ -18,8 +19,30 @@ public class HospitalizacionService {
     private HospitalizacionRepository hospitalizacionRepository;
 
    
-    public Hospitalizacion guardar(HospitalizacionDTO dto) {
-        Hospitalizacion h = dto.toModel();
+ public Hospitalizacion guardar(HospitalizacionDTO dto) {
+        // Reglas de Integridad y Validación del Negocio
+        if (dto.getIdMascota() == null || dto.getIdMascota() <= 0) {
+            throw new BadRequestException("El ID de la mascota debe ser un identificador válido.");
+        }
+        if (dto.getIdDueno() == null || dto.getIdDueno() <= 0) {
+            throw new BadRequestException("El ID del dueño debe ser un identificador válido.");
+        } 
+        
+        if (dto.getFecha_alta().isBefore(dto.getFecha_inicio())) {
+            throw new BadRequestException("La fecha de inicio es obligatoria.");
+        }
+        if (dto.getFecha_inicio() == null || dto.getFecha_alta() == null) {
+            throw new BadRequestException("La fecha de alta no puede ser anterior a la fecha de inicio.");
+        }
+        
+       
+
+        Hospitalizacion h = new Hospitalizacion();
+        h.setIdMascota(dto.getIdMascota());
+        h.setIdDueno(dto.getIdDueno());
+        h.setFecha_inicio(dto.getFecha_inicio());
+        h.setFecha_alta(dto.getFecha_alta());
+        h.setDiagnostico(dto.getDiagnostico());
         return hospitalizacionRepository.save(h);
     }
 
@@ -27,13 +50,16 @@ public class HospitalizacionService {
         return hospitalizacionRepository.findAll();
     }
 
-    // Busca opcionalmente por ID
+    
     public Optional<Hospitalizacion> findById(Long id) {
         return hospitalizacionRepository.findById(id);
     }
 
-    // Actualiza los datos controlando si el ID no existe
-    public Hospitalizacion actualizar(Long id, Hospitalizacion datosNuevos) {
+  public Hospitalizacion actualizar(Long id, Hospitalizacion datosNuevos) {
+        if (datosNuevos.getFecha_alta().isBefore(datosNuevos.getFecha_inicio())) {
+            throw new BadRequestException("La fecha de alta modificada no puede ser anterior a la fecha de inicio.");
+        }
+
         return hospitalizacionRepository.findById(id)
                 .map(h -> {
                     h.setIdMascota(datosNuevos.getIdMascota());
@@ -43,13 +69,12 @@ public class HospitalizacionService {
                     h.setDiagnostico(datosNuevos.getDiagnostico());
                     return hospitalizacionRepository.save(h);
                 })
-                .orElseThrow(() -> new ResourceNotFoundException("Registro de hospitalización no encontrado con ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Hospitalización no encontrada con ID: " + id));
     }
 
-    // Elimina verificando existencia previa con el operador '!'
-    public void eliminar(Long id) {
+   public void eliminar(Long id) {
         if (!hospitalizacionRepository.existsById(id)) {
-            throw new ResourceNotFoundException("No se puede eliminar, ID inexistente: " + id);
+            throw new ResourceNotFoundException("No se puede eliminar, registro inexistente: " + id);
         }
         hospitalizacionRepository.deleteById(id);
     }
