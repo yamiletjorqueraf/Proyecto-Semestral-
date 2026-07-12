@@ -1,6 +1,8 @@
 package cl.duoc.ms_mascota.service;
 
 import cl.duoc.ms_mascota.client.DuenoClient;
+import cl.duoc.ms_mascota.exception.BadRequestException;
+import cl.duoc.ms_mascota.exception.ResourceNotFoundException;
 import cl.duoc.ms_mascota.model.Mascota;
 import cl.duoc.ms_mascota.repository.MascotaRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +42,9 @@ public class MascotaServiceTest {
     void testGuardarExitoso() {
         when(duenoClient.existeDueno(2L)).thenReturn(true);
         when(mascotaRepository.save(any(Mascota.class))).thenReturn(mascota);
+        
         Mascota resultado = mascotaService.guardar(mascota);
+        
         assertNotNull(resultado);
         assertEquals("Firulais", resultado.getNombre());
     }
@@ -48,8 +52,33 @@ public class MascotaServiceTest {
     @Test
     void testGuardarDuenoNoExiste() {
         when(duenoClient.existeDueno(2L)).thenReturn(false);
-        assertThrows(RuntimeException.class, () -> mascotaService.guardar(mascota));
+        
+        // CORREGIDO: Verificar la excepción BadRequestException específica
+        assertThrows(BadRequestException.class, () -> mascotaService.guardar(mascota));
         verify(mascotaRepository, never()).save(any(Mascota.class));
+    }
+ 
+    @Test
+    void testActualizarMascotaNoExiste() {
+        Mascota nuevosDatos = new Mascota(1L, "NuevoNombre", "Perro", "Pug", 4, 2L);
+        when(mascotaRepository.findById(1L)).thenReturn(Optional.empty());
+
+        // CORREGIDO: Verificar que lanza ResourceNotFoundException
+        assertThrows(ResourceNotFoundException.class, () -> mascotaService.actualizar(1L, nuevosDatos));
+    }
+
+    @Test
+    void testActualizarSinCambioDeDuenoNoLlamaAFeign() {
+        Mascota nuevosDatos = new Mascota(1L, "Firulais Editado", "Perro", "Labrador", 4, 2L); // Mismo idDueno (2L)
+        
+        when(mascotaRepository.findById(1L)).thenReturn(Optional.of(mascota));
+        when(mascotaRepository.save(any(Mascota.class))).thenReturn(nuevosDatos);
+
+        Mascota resultado = mascotaService.actualizar(1L, nuevosDatos);
+
+        assertNotNull(resultado);
+        assertEquals("Firulais Editado", resultado.getNombre());
+        verify(duenoClient, never()).existeDueno(anyLong());
     }
  
     @Test
@@ -60,28 +89,19 @@ public class MascotaServiceTest {
     }
  
     @Test
-    void testFindByIdExitoso() {
-        when(mascotaRepository.findById(1L)).thenReturn(Optional.of(mascota));
-        Optional<Mascota> resultado = mascotaService.findById(1L);
-        assertTrue(resultado.isPresent());
-    }
- 
-    @Test
-    void testFindByIdNoEncontrado() {
-        when(mascotaRepository.findById(99L)).thenReturn(Optional.empty());
-        assertFalse(mascotaService.findById(99L).isPresent());
-    }
- 
-    @Test
-    void testExistePorId() {
+    void testEliminarExitoso() {
         when(mascotaRepository.existsById(1L)).thenReturn(true);
-        assertTrue(mascotaService.existePorId(1L));
-    }
- 
-    @Test
-    void testEliminar() {
         doNothing().when(mascotaRepository).deleteById(1L);
+        
         assertDoesNotThrow(() -> mascotaService.eliminar(1L));
         verify(mascotaRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void testEliminarNoExistenteLanzaException() {
+        when(mascotaRepository.existsById(99L)).thenReturn(false);
+
+        assertThrows(ResourceNotFoundException.class, () -> mascotaService.eliminar(99L));
+        verify(mascotaRepository, never()).deleteById(99L);
     }
 }
