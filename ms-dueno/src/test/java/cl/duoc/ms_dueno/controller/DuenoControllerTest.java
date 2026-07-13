@@ -43,8 +43,8 @@ public class DuenoControllerTest {
  
     @BeforeEach
     void setUp() {
-        dueno = new Dueno(1L,2L, "Carlos", "López", "12345678-9", "carlos@mail.com", 912345678L, "Av. Principal 123");
-        duenoDto = new DuenoDTO(null,2L, "Carlos", "López", "12345678-9", "carlos@mail.com", 912345678L, "Av. Principal 123");
+        dueno = new Dueno(1L,2L,3L, "Carlos", "López", "12345678-9", "carlos@mail.com", 912345678L, "Av. Principal 123");
+        duenoDto = new DuenoDTO(null,2L,3L, "Carlos", "López", "12345678-9", "carlos@mail.com", 912345678L, "Av. Principal 123");
  
         when(assembler.toModel(any(Dueno.class)))
                 .thenReturn(EntityModel.of(DuenoDTO.fromModel(dueno)));

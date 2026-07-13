@@ -1,27 +1,6 @@
-version: '3.8'
- 
 services:
+
  
-  # ─── BASE DE DATOS ────────────────────────────────────────────
-  mysql:
-    image: mysql:8
-    container_name: mysql-veterinaria
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_ROOT_HOST: '%'
-    ports:
-      - "3307:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - veterinaria-net
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-       # ─── MICROSERVICIOS ───────────────────────────────────────────
   ms-usuario:
     build: ./ms-usuario
     container_name: ms-usuario
@@ -29,15 +8,14 @@ services:
     ports:
       - "8091:8091"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_usuarios?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/db_usuarios?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-    depends_on:
-      mysql:
-        condition: service_healthy
+      SPRING_DATASOURCE_PASSWORD: ""
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - veterinaria-net
- 
+
   ms-personal:
     build: ./ms-personal
     container_name: ms-personal
@@ -45,15 +23,14 @@ services:
     ports:
       - "8085:8085"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_personal?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/db_personal?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-    depends_on:
-      mysql:
-        condition: service_healthy
+      SPRING_DATASOURCE_PASSWORD: ""
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - veterinaria-net
- 
+
   ms-dueno:
     build: ./ms-dueno
     container_name: ms-dueno
@@ -61,19 +38,19 @@ services:
     ports:
       - "8082:8082"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_duenos?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/db_duenos?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_PASSWORD: ""
       MS_USUARIO_URL: http://ms-usuario:8091
-      MS_MASCOTA_URL: http://ms-mascota:8083 
+      MS_MASCOTA_URL: http://ms-mascota:8083
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
-      mysql:
-        condition: service_healthy
       ms-usuario:
         condition: service_started
     networks:
       - veterinaria-net
- 
+
   ms-mascota:
     build: ./ms-mascota
     container_name: ms-mascota
@@ -81,18 +58,18 @@ services:
     ports:
       - "8083:8083"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_mascotas?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/db_mascotas?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_PASSWORD: ""
       MS_DUENO_URL: http://ms-dueno:8082
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
-      mysql:
-        condition: service_healthy
       ms-dueno:
         condition: service_started
     networks:
       - veterinaria-net
- 
+
   ms-cita:
     build: ./ms-cita
     container_name: ms-cita
@@ -100,21 +77,21 @@ services:
     ports:
       - "8084:8084"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_citas?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/db_citas?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_PASSWORD: ""
       MS_MASCOTA_URL: http://ms-mascota:8083
       MS_PERSONAL_URL: http://ms-personal:8085
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
-      mysql:
-        condition: service_healthy
       ms-mascota:
         condition: service_started
       ms-personal:
         condition: service_started
     networks:
       - veterinaria-net
- 
+
   ms-ventas:
     build: ./ms-ventas
     container_name: ms-ventas
@@ -122,21 +99,21 @@ services:
     ports:
       - "8089:8089"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_ventas?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/db_ventas?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_PASSWORD: ""
       API_DUENO_URL: http://ms-dueno:8082
       API_MASCOTA_URL: http://ms-mascota:8083
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
-      mysql:
-        condition: service_healthy
       ms-dueno:
         condition: service_started
       ms-mascota:
         condition: service_started
     networks:
       - veterinaria-net
- 
+
   ms-pago:
     build: ./ms-pago
     container_name: ms-pago
@@ -144,21 +121,21 @@ services:
     ports:
       - "8090:8090"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_pago?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/db_pago?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_PASSWORD: ""
       API_VENTA_URL: http://ms-ventas:8089
       API_DUENO_URL: http://ms-dueno:8082
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
-      mysql:
-        condition: service_healthy
       ms-ventas:
         condition: service_started
       ms-dueno:
         condition: service_started
     networks:
       - veterinaria-net
-    
+
   ms-hospitalizacion:
     build: ./ms-hospitalizacion
     container_name: ms-hospitalizacion
@@ -166,12 +143,11 @@ services:
     ports:
       - "8086:8086"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_hospitalizacion?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/db_hospitalizacion?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-    depends_on:
-      mysql:
-        condition: service_healthy
+      SPRING_DATASOURCE_PASSWORD: ""
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - veterinaria-net
 
@@ -182,12 +158,11 @@ services:
     ports:
       - "8087:8087"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_resultados?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/db_resultados?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-    depends_on:
-      mysql:
-        condition: service_healthy
+      SPRING_DATASOURCE_PASSWORD: ""
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - veterinaria-net
 
@@ -198,12 +173,11 @@ services:
     ports:
       - "8088:8088"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_farmacia?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/db_farmacia?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-    depends_on:
-      mysql:
-        condition: service_healthy
+      SPRING_DATASOURCE_PASSWORD: ""
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - veterinaria-net
 
@@ -222,17 +196,15 @@ services:
       - ms-cita
       - ms-ventas
       - ms-pago
-      - ms-hospitalizacion        
-      - ms-resultados-examenes    
+      - ms-hospitalizacion
+      - ms-resultados-examenes
       - ms-farmacia
-    
     networks:
       - veterinaria-net
-      # ─── VOLÚMENES Y REDES ────────────────────────────────────────
-volumes:
-  mysql_data:
- 
+
+      # ─── REDES ──────────────────────────────────────────────────
 networks:
   veterinaria-net:
     driver: bridge
+
  

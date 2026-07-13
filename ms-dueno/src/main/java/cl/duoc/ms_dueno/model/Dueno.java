@@ -29,9 +29,9 @@ public class Dueno {
     @Column(name = "idUsuario")
     private Long idUsuario;
 
-    //@NotNull(message = "Debe asociar una mascota")
-    //@Column(name = "idMascota")
-    //private Long idMascota;
+    @NotNull(message = "Debe asociar una mascota")
+    @Column(name = "idMascota")
+    private Long idMascota;
     
     @NotBlank(message = "El nombre del usuario no debe estar en blanco")
     @Column(name = "nombre")

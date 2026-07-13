@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class DuenoDTO {
     private Long idDueno;
     private Long idUsuario;
-    //private Long idMascota;
+    private Long idMascota;
     private String nombre;
     private String apellido;
     private String rut;
@@ -22,12 +22,12 @@ public class DuenoDTO {
     private String direccion;
 
     public Dueno toModel() {
-        return new Dueno(idDueno, idUsuario, nombre, apellido, rut, email, telefono, direccion);
+        return new Dueno(idDueno, idUsuario, idMascota, nombre, apellido, rut, email, telefono, direccion);
     }
 
     public static DuenoDTO fromModel(Dueno d) {
         if (d == null) return null;
-        return new DuenoDTO(d.getIdDueno(), d.getIdUsuario(), d.getNombre(), d.getApellido(), d.getRut(), d.getEmail(), d.getTelefono(), d.getDireccion());
+        return new DuenoDTO(d.getIdDueno(), d.getIdUsuario(), d.getIdMascota(), d.getNombre(), d.getApellido(), d.getRut(), d.getEmail(), d.getTelefono(), d.getDireccion());
     }
 
 
