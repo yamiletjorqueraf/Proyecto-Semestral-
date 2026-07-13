@@ -5,7 +5,7 @@ Sistema de gestión integral para una clínica veterinaria, construido como una 
 
 ## Integrantes
 
-- (agrega aquí los nombres del equipo)
+- Yamilet Jorquera y Paulina Muñoz
 
 ## Contexto del proyecto
 
